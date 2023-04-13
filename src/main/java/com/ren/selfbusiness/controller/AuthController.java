@@ -6,6 +6,7 @@ import com.ren.selfbusiness.dto.response.AuthResponse;
 import com.ren.selfbusiness.dto.response.MessageResponse;
 import com.ren.selfbusiness.service.AuthService;
 import lombok.AllArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @AllArgsConstructor
+@Log4j2
 @RequestMapping("/api/auth")
 public class AuthController {
     private final AuthService authService;
@@ -21,12 +23,14 @@ public class AuthController {
     @PostMapping("/signin")
     public ResponseEntity<?> auth(@RequestBody AuthRequest req) {
         AuthResponse res = authService.auth(req);
+        log.debug("user has logged");
         return ResponseEntity.ok(res);
     }
 
     @PostMapping("/signup")
     public ResponseEntity<?> reg(@RequestBody RegistrationRequest req) {
         MessageResponse res = authService.reg(req);
+        log.debug("user has registered");
         return ResponseEntity.ok(res);
     }
 }

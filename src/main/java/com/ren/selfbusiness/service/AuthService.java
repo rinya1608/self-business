@@ -9,6 +9,7 @@ import com.ren.selfbusiness.dto.response.MessageResponse;
 import com.ren.selfbusiness.model.User;
 import com.ren.selfbusiness.resolver.exception.ExceptionResolver;
 import lombok.AllArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @AllArgsConstructor
+@Log4j2
 public class AuthService {
     private final UserService userService;
     private final AuthenticationManager authenticationManager;
@@ -41,7 +43,7 @@ public class AuthService {
             User user = ((User) authenticate.getPrincipal());
             return new AuthResponse(jwt, user);
         } catch (AuthenticationException e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
             throw exceptionResolver.resolve(ErrorCodeStorage.AUTH_01);
         }
     }

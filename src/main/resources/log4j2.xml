@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Configuration status="trace">
+    <Properties>
+        <Property name="LOG_PATTERN">
+            %d %highlight{%-5p} %style{%pid}{magenta} [%thread] %style{%C{1.}}{cyan}.%M(%F:%L) : %m%n
+        </Property>
+        <Property name="LOG_ROOT">
+            logs/
+        </Property>
+    </Properties>
+    <Appenders>
+        <Console name="stdout" target="SYSTEM_OUT">
+            <PatternLayout disableAnsi="false" pattern="${LOG_PATTERN}"/>
+        </Console>
+        <RollingFile name="file"
+                     fileName="${LOG_ROOT}sb.log"
+                     filePattern="${LOG_ROOT}sb-%d{yyyy-MM-dd}.log">
+            <PatternLayout pattern="${LOG_PATTERN}"/>
+            <Policies>
+                <SizeBasedTriggeringPolicy size="10MB" />
+            </Policies>
+            <DefaultRolloverStrategy max="10">
+                <Delete basePath="${LOG_ROOT}" maxDepth="10">
+                    <IfLastModified age="30d" />
+                </Delete>
+            </DefaultRolloverStrategy>
+        </RollingFile>
+    </Appenders>
+    <Loggers>
+        <Logger name="com.ren.selfbusiness" additivity="false" level="debug">
+            <AppenderRef ref="stdout"/>
+            <AppenderRef ref="file"/>
+        </Logger>
+        <Root level="warn">
+            <AppenderRef ref="stdout"/>
+            <AppenderRef ref="file"/>
+        </Root>
+    </Loggers>
+
+</Configuration>

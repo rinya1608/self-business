@@ -2,9 +2,9 @@ package com.ren.selfbusiness.config.jwt;
 
 import com.ren.selfbusiness.model.User;
 import com.ren.selfbusiness.property.AppProperties;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
 import lombok.AllArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
@@ -14,6 +14,7 @@ import java.util.Date;
 
 @Component
 @AllArgsConstructor
+@Log4j2
 public class JwtHelper {
     private final AppProperties properties;
 
@@ -43,8 +44,14 @@ public class JwtHelper {
                     .setSigningKey(properties.getJwt().getSecret())
                     .parseClaimsJws(authToken);
             return true;
-        } catch (Exception e) {
-            System.out.println(e);
+        } catch (MalformedJwtException e) {
+            log.warn("Invalid JWT token: {}", e.getMessage());
+        } catch (ExpiredJwtException e) {
+            log.warn("JWT token is expired: {}", e.getMessage());
+        } catch (UnsupportedJwtException e) {
+            log.warn("JWT token is unsupported: {}", e.getMessage());
+        } catch (IllegalArgumentException e) {
+            log.warn("JWT claims string is empty: {}", e.getMessage());
         }
 
         return false;
@@ -55,6 +62,7 @@ public class JwtHelper {
             return token.substring(7);
         }
 
+        log.warn("token {} incorrect", token);
         return null;
     }
 }
