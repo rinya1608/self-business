@@ -9,12 +9,6 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class ErrorResponse {
-    private Integer status;
     private String code;
     private String message;
-
-    public ErrorResponse(String code, String message) {
-        this.code = code;
-        this.message = message;
-    }
 }
