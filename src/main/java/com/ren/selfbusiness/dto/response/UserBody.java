@@ -10,7 +10,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class AuthResponse {
+public class UserBody {
     private String jwtToken;
     private User user;
 }

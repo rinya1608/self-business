@@ -4,8 +4,9 @@ import com.ren.selfbusiness.config.jwt.JwtHelper;
 import com.ren.selfbusiness.constant.ErrorCodeStorage;
 import com.ren.selfbusiness.dto.request.AuthRequest;
 import com.ren.selfbusiness.dto.request.RegistrationRequest;
-import com.ren.selfbusiness.dto.response.AuthResponse;
-import com.ren.selfbusiness.dto.response.MessageResponse;
+import com.ren.selfbusiness.dto.response.UserBody;
+import com.ren.selfbusiness.dto.response.MessageBody;
+import com.ren.selfbusiness.dto.response.Response;
 import com.ren.selfbusiness.model.User;
 import com.ren.selfbusiness.resolver.exception.ExceptionResolver;
 import lombok.AllArgsConstructor;
@@ -26,25 +27,25 @@ public class AuthService {
     private final JwtHelper jwtHelper;
     private final ExceptionResolver exceptionResolver;
 
-    public MessageResponse reg(RegistrationRequest req) {
+    public Response<MessageBody> reg(RegistrationRequest req) {
         userService.addUser(req);
-        return new MessageResponse("Пользователь успешно добавлен");
+        return Response.<MessageBody>builder().body(new MessageBody("Пользователь успешно добавлен")).build();
     }
 
-    public AuthResponse auth(AuthRequest req) {
+    public Response<UserBody> auth(AuthRequest req) {
         return auth(req.getEmail(), req.getPassword());
     }
 
-    public AuthResponse auth(String email, String password) {
+    public Response<UserBody> auth(String email, String password) {
         try {
             Authentication authenticate = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
             SecurityContextHolder.getContext().setAuthentication(authenticate);
             String jwt = jwtHelper.generateJwtToken(authenticate);
             User user = ((User) authenticate.getPrincipal());
-            return new AuthResponse(jwt, user);
+            return Response.<UserBody>builder().body(new UserBody(jwt, user)).build();
         } catch (AuthenticationException e) {
             log.error(e.getMessage(), e);
-            throw exceptionResolver.resolve(ErrorCodeStorage.AUTH_01);
+            throw exceptionResolver.resolve(ErrorCodeStorage.AUTH_01, e);
         }
     }
 }

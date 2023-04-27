@@ -19,15 +19,17 @@ public class JwtHelper {
     private final AppProperties properties;
 
     public String generateJwtToken(Authentication authentication) {
+        return generateJwtToken((User) authentication.getPrincipal());
+    }
 
-        UserDetails userPrincipal = (User) authentication.getPrincipal();
-
+    public String generateJwtToken(UserDetails userDetails) {
         return Jwts.builder()
-                .setSubject((userPrincipal.getUsername()))
+                .setSubject((userDetails.getUsername()))
                 .setIssuedAt(new Date())
                 .setExpiration(new Date((new Date()).getTime() + properties.getJwt().getExpirationMs()))
                 .signWith(SignatureAlgorithm.HS512, properties.getJwt().getSecret())
                 .compact();
+
     }
 
     public String getEmailFromJwtToken(String token) {
@@ -61,8 +63,6 @@ public class JwtHelper {
         if (StringUtils.hasText(token) && token.startsWith("Bearer ")) {
             return token.substring(7);
         }
-
-        log.warn("token {} incorrect", token);
         return null;
     }
 }

@@ -3,6 +3,8 @@ package com.ren.selfbusiness.service;
 import com.ren.selfbusiness.config.jwt.JwtHelper;
 import com.ren.selfbusiness.constant.ErrorCodeStorage;
 import com.ren.selfbusiness.dto.request.RegistrationRequest;
+import com.ren.selfbusiness.dto.response.Response;
+import com.ren.selfbusiness.dto.response.UserBody;
 import com.ren.selfbusiness.model.User;
 import com.ren.selfbusiness.repository.UserRepository;
 import com.ren.selfbusiness.resolver.exception.ExceptionResolver;
@@ -18,6 +20,13 @@ public class UserService {
     private final JwtHelper jwtHelper;
     private final ExceptionResolver exceptionResolver;
     private final PasswordEncoder passwordEncoder;
+
+    public Response<UserBody> getCurrentUser(String jwt) {
+        User user = parseAndFindByJwt(jwt);
+        String newJwt = jwtHelper.generateJwtToken(user);
+
+        return Response.<UserBody>builder().body(new UserBody(newJwt, user)).build();
+    }
 
     public boolean userExists(String email) {
         return userRepository.existsById(email);
