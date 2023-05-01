@@ -15,6 +15,7 @@ import {useAppDispatch, useAppSelector} from "../hooks/redux";
 import {IAuthData} from "../models/IAuthData";
 import {auth, reg} from "../api/auth";
 import {IRegData} from "../models/IRegData";
+import {MAIN} from "../constants/Urls";
 
 function Registration() {
 
@@ -60,7 +61,7 @@ function Registration() {
         }
     };
 
-    const forward = () => {window.location.href = '/';}
+    const forward = () => {window.location.href = MAIN;}
 
     return (
         <Container maxWidth="sm">

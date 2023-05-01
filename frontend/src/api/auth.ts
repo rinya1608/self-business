@@ -7,6 +7,7 @@ import {getJwtTokenHeader} from "../utils/jwtUtils";
 import {IAuthData} from "../models/IAuthData";
 import {messageSlice} from "../store/reducers/MesageSlice";
 import {IMessage} from "../models/IMessage";
+import {TOKEN} from "../constants/StorageConstants";
 
 export const auth = (req: IAuthData) => async (dispatch: AppDispatch) => {
     try {
@@ -20,13 +21,16 @@ export const auth = (req: IAuthData) => async (dispatch: AppDispatch) => {
         }).then(response => {
             return response.json() as Promise<Response<ICurrentUser>>
         }).then((r => {
+            console.log(r)
             if (r.error != null) {
                 dispatch(currentUserSlice.actions.userFetchingError(r.error))
 
             } else if (r.body != null) {
                 dispatch(currentUserSlice.actions.userFetchingSuccess(r.body))
-                localStorage.setItem('token', r.body.jwtToken)
+                localStorage.setItem(TOKEN, r.body.jwtToken)
+                console.log(r.body)
             }
+            console.log(r)
             return r;
         })).catch(e => {
             console.log(e)
@@ -74,19 +78,33 @@ export const getCurrentUser = () => async (dispatch: AppDispatch) => {
             method: 'post',
             headers: getJwtTokenHeader()
         }).then(response => {
-            return response.json() as Promise<Response<ICurrentUser>>
+            if (response.ok)
+                return response.json() as Promise<Response<ICurrentUser>>;
+            else {
+                throw response.status;
+            }
         }).then((r => {
             if (r.error != null) {
-                dispatch(currentUserSlice.actions.userFetchingError(r.error))
+                dispatch(currentUserSlice.actions.userFetchingError(r.error));
 
             } else if (r.body != null) {
-                dispatch(currentUserSlice.actions.userFetchingSuccess(r.body))
+                dispatch(currentUserSlice.actions.userFetchingSuccess(r.body));
             }
             return r;
         })).catch(e => {
-            console.log(e)
+            if (e === 401)
+                dispatch(currentUserSlice.actions.userFetchingClear());
         });
 
+    } catch (e) {
+        console.warn(e);
+    }
+}
+
+export const logout = () => async (dispatch: AppDispatch) => {
+    try {
+        dispatch(currentUserSlice.actions.userFetchingClear());
+        localStorage.removeItem(TOKEN);
     } catch (e) {
         console.warn(e);
     }
