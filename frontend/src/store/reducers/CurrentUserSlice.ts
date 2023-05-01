@@ -31,6 +31,11 @@ export const currentUserSlice = createSlice({
             state.error = action.payload;
             state.user = null;
             state.isLoading = false;
+        },
+        userFetchingClear(state) {
+            state.error = null;
+            state.user = null;
+            state.isLoading = false;
         }
     }
 })
