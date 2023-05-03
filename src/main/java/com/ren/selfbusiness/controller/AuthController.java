@@ -2,7 +2,7 @@ package com.ren.selfbusiness.controller;
 
 import com.ren.selfbusiness.dto.request.AuthRequest;
 import com.ren.selfbusiness.dto.request.RegistrationRequest;
-import com.ren.selfbusiness.dto.response.UserBody;
+import com.ren.selfbusiness.dto.response.JwtUserBody;
 import com.ren.selfbusiness.dto.response.MessageBody;
 import com.ren.selfbusiness.dto.response.Response;
 import com.ren.selfbusiness.service.AuthService;
@@ -23,7 +23,7 @@ public class AuthController {
 
     @PostMapping("/signin")
     public ResponseEntity<?> auth(@RequestBody(required = false) AuthRequest req) {
-        Response<UserBody> res = authService.auth(req);
+        Response<JwtUserBody> res = authService.auth(req);
         log.debug("user has logged");
         return ResponseEntity.ok(res);
     }

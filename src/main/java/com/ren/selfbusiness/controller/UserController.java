@@ -1,7 +1,7 @@
 package com.ren.selfbusiness.controller;
 
+import com.ren.selfbusiness.dto.response.JwtUserBody;
 import com.ren.selfbusiness.dto.response.Response;
-import com.ren.selfbusiness.dto.response.UserBody;
 import com.ren.selfbusiness.service.UserService;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -18,9 +18,9 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/current")
-    public Response<UserBody> getCurrentUser(@RequestHeader("Authorization") String token) {
-        Response<UserBody> currentUser = userService.getCurrentUser(token);
-        log.debug("get current user " + currentUser.getBody().getUser().getEmail());
+    public Response<JwtUserBody> getCurrentUser(@RequestHeader("Authorization") String token) {
+        Response<JwtUserBody> currentUser = userService.getCurrentUser(token);
+        log.debug("get current user " + currentUser.getBody().user().email());
         return currentUser;
     }
 }

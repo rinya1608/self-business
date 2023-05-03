@@ -4,9 +4,11 @@ import com.ren.selfbusiness.config.jwt.JwtHelper;
 import com.ren.selfbusiness.constant.ErrorCodeStorage;
 import com.ren.selfbusiness.dto.request.AuthRequest;
 import com.ren.selfbusiness.dto.request.RegistrationRequest;
+import com.ren.selfbusiness.dto.response.JwtUserBody;
 import com.ren.selfbusiness.dto.response.MessageBody;
 import com.ren.selfbusiness.dto.response.Response;
-import com.ren.selfbusiness.dto.response.JwtUserBody;
+import com.ren.selfbusiness.dto.response.UserBody;
+import com.ren.selfbusiness.mapper.EntityMapper;
 import com.ren.selfbusiness.model.User;
 import com.ren.selfbusiness.resolver.exception.ExceptionResolver;
 import com.ren.selfbusiness.service.AuthService;
@@ -25,6 +27,7 @@ import org.springframework.stereotype.Service;
 @Log4j2
 public class AuthServiceImpl implements AuthService {
     private final UserService userService;
+    private final EntityMapper<UserBody, User, RegistrationRequest> mapper;
     private final AuthenticationManager authenticationManager;
     private final JwtHelper jwtHelper;
     private final ExceptionResolver exceptionResolver;
@@ -44,7 +47,7 @@ public class AuthServiceImpl implements AuthService {
             SecurityContextHolder.getContext().setAuthentication(authenticate);
             String jwt = jwtHelper.generateJwtToken(authenticate);
             User user = ((User) authenticate.getPrincipal());
-            return Response.<JwtUserBody>builder().body(new JwtUserBody(jwt, user)).build();
+            return Response.<JwtUserBody>builder().body(new JwtUserBody(jwt, mapper.toDto(user))).build();
         } catch (AuthenticationException e) {
             log.error(e.getMessage(), e);
             throw exceptionResolver.resolve(ErrorCodeStorage.AUTH_01, e);
