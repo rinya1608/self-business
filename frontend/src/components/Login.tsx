@@ -14,7 +14,9 @@ function Login() {
     const {user, isLoading, error} = useAppSelector(state => state.currentUserReducer)
 
     useEffect(() => {
-        if (user != null) window.location.href = MAIN;
+        dispatch(getCurrentUser()).then(() => {
+            if (user != null) window.location.href = MAIN;
+        })
     }, [user])
 
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
