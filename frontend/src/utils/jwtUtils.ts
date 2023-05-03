@@ -9,7 +9,10 @@ export function getJwtToken(): string | null {
 export function getJwtTokenHeader(): HeadersInit | undefined {
     let token = localStorage.getItem("token");
     if (token != null) {
-        return {'Authorization' : 'Bearer ' + token};
+        return {
+            'Authorization' : 'Bearer ' + token,
+            'Content-Type': 'application/json'
+        };
     }
     return undefined;
 }

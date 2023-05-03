@@ -7,19 +7,24 @@ import {
     IconButton,
     List,
     ListItem,
-    ListItemButton, ListItemIcon, ListItemText,
+    ListItemButton,
+    ListItemText,
+    Menu,
+    MenuItem,
     Toolbar,
     Typography
 } from "@mui/material";
 import MenuIcon from '@mui/icons-material/Menu';
 import {useAppDispatch, useAppSelector} from "../hooks/redux";
-import {current} from "@reduxjs/toolkit";
 import {getCurrentUser, logout} from "../api/auth";
 import {MAIN} from "../constants/Urls";
+import ResourceTypeDialog from "./ResourceTypeDialog";
 
 const Header = () => {
 
     const [menu, setMenu] = useState(false);
+    const [resourceTypeDialog, setResourceTypeDialog] = useState(false);
+    const [createMenu, setCreateMenu] = React.useState<null | HTMLElement>(null);
 
     const dispatch = useAppDispatch()
     const {user, isLoading, error} = useAppSelector(state => state.currentUserReducer)
@@ -33,27 +38,63 @@ const Header = () => {
         window.location.href = MAIN;
     }
 
+    const createMenuHandleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+        setCreateMenu(event.currentTarget);
+    };
+
+    const resourceTypeHandleOpen = () => {
+        setResourceTypeDialog(true);
+    };
+
+    const resourceTypeHandleClose = () => {
+        setResourceTypeDialog(false);
+        setCreateMenu(null);
+    };
+
     return (
-        <Box sx={{ flexGrow: 1 }}>
+        <Box sx={{flexGrow: 1}}>
             <AppBar position="static">
                 <Toolbar>
-                    <IconButton
-                        size="large"
-                        edge="start"
-                        color="inherit"
-                        aria-label="menu"
-                        sx={{ mr: 2 }}
-                        onClick={() => setMenu(true)}
-                    >
-                        <MenuIcon />
-                    </IconButton>
-                    <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                        News
-                    </Typography>
-                    {
-                        user ? <Button color="inherit" onClick={logoutEvent}>Logout</Button>
-                            : <Button color="inherit" href={"/login"}>Login</Button>
-                    }
+                    <Box sx={{
+                        flexGrow: 1,
+                        display: 'flex',
+                        flexDirection: 'row',
+                        alignItems: 'center'
+                    }}>
+                        <IconButton
+                            size="large"
+                            edge="start"
+                            color="inherit"
+                            aria-label="menu"
+                            sx={{mr: 2}}
+                            onClick={() => setMenu(true)}
+                        >
+                            <MenuIcon/>
+                        </IconButton>
+                        <Typography variant="h6" component="div">
+                            Self Business
+                        </Typography>
+                        <Button size="medium" variant="contained" onClick={createMenuHandleClick} sx={{
+                            ml: 5,
+                        }}>
+                            Create
+                        </Button>
+                        <Menu
+                            id="simple-menu"
+                            anchorEl={createMenu}
+                            keepMounted
+                            open={Boolean(createMenu)}
+                            onClose={() => setCreateMenu(null)}
+                        >
+                            <MenuItem onClick={() => setResourceTypeDialog(true)}>Resource Type</MenuItem>
+                        </Menu>
+                    </Box>
+                    <Box>
+                        {
+                            user ? <Button color="inherit" onClick={logoutEvent}>Logout</Button>
+                                : <Button color="inherit" href={"/login"}>Login</Button>
+                        }
+                    </Box>
                 </Toolbar>
             </AppBar>
             <React.Fragment key="left">
@@ -63,7 +104,7 @@ const Header = () => {
                     onClose={() => setMenu(false)}
                 >
                     <Box
-                        sx={{ width: 250}}
+                        sx={{width: 250}}
                         role="presentation"
                         onClick={() => setMenu(true)}
                     >
@@ -71,7 +112,7 @@ const Header = () => {
                             {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
                                 <ListItem key={text} disablePadding>
                                     <ListItemButton>
-                                        <ListItemText primary={text} />
+                                        <ListItemText primary={text}/>
                                     </ListItemButton>
                                 </ListItem>
                             ))}
@@ -79,6 +120,7 @@ const Header = () => {
                     </Box>
                 </Drawer>
             </React.Fragment>
+            <ResourceTypeDialog open={resourceTypeDialog} handleOpen={resourceTypeHandleOpen} handleClose={resourceTypeHandleClose}/>
         </Box>
     );
 };

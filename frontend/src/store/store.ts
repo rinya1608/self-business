@@ -1,15 +1,17 @@
 import {combineReducers, configureStore} from "@reduxjs/toolkit";
 import currentUserReducer from "./reducers/CurrentUserSlice"
 import messageReducer from "./reducers/MesageSlice"
+import resourceTypeReducer from "./reducers/ResourceTypeSlice"
 
 
 const rootReducer = combineReducers({
     currentUserReducer,
-    messageReducer
+    messageReducer,
+    resourceTypeReducer
 })
 
 export const setupStore = () => {
-    return configureStore( {
+    return configureStore({
         reducer: rootReducer
     })
 }

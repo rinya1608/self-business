@@ -13,7 +13,6 @@ const store = setupStore();
 root.render(
     <Provider store={store}>
         <BrowserRouter>
-            <Header/>
             <App/>
         </BrowserRouter>
     </Provider>
