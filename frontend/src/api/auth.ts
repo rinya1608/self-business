@@ -58,7 +58,7 @@ export const reg = (req: IRegData) => async (dispatch: AppDispatch) => {
                 dispatch(messageSlice.actions.messageFetchingError(r.error))
 
             } else if (r.body != null) {
-                dispatch(messageSlice.actions.messageFetchingSuccess(r.body.message))
+                dispatch(messageSlice.actions.messageFetchingSuccess(r.body))
             }
             return r;
         })).catch(e => {
