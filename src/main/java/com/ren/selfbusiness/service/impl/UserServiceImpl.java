@@ -12,11 +12,13 @@ import com.ren.selfbusiness.repository.UserRepository;
 import com.ren.selfbusiness.resolver.exception.ExceptionResolver;
 import com.ren.selfbusiness.service.UserService;
 import lombok.AllArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 @Service
 @AllArgsConstructor
+@Log4j2
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final JwtHelper jwtHelper;
@@ -45,7 +47,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User findByEmail(String email) {
-        return userRepository.findById(email).orElse(null);
+        log.debug(email);
+        return userRepository.findByEmail(email).orElseThrow(() -> exceptionResolver.resolve(ErrorCodeStorage.AUTH_01));
     }
 
     @Override
@@ -54,7 +57,7 @@ public class UserServiceImpl implements UserService {
     }
 
     private boolean userExists(String email) {
-        return userRepository.existsById(email);
+        return userRepository.existsByEmail(email);
     }
 
     private User findByJwt(String jwt) {

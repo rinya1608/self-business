@@ -2,14 +2,8 @@ package com.ren.selfbusiness.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ren.selfbusiness.enumarate.AccessRole;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import jakarta.persistence.*;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -25,12 +19,21 @@ import java.util.List;
 public class User implements UserDetails {
 
     @Id
+    @SequenceGenerator(name = "user_seq", sequenceName = "user_sequence", allocationSize = 20)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_seq")
+    @EqualsAndHashCode.Include()
+    private Long Id;
     @Column(unique = true)
     private String email;
     private String name;
     @JsonIgnore
     private String password;
 
+    public User(String email, String name, String password) {
+        this.email = email;
+        this.name = name;
+        this.password = password;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
