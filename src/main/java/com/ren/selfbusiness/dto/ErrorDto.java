@@ -10,4 +10,5 @@ import lombok.Setter;
 public class ErrorDto {
     private String code;
     private String message;
+    private Integer httpStatus;
 }

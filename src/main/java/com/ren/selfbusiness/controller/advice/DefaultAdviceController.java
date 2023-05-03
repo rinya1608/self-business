@@ -1,5 +1,6 @@
 package com.ren.selfbusiness.controller.advice;
 
+import com.ren.selfbusiness.dto.ErrorDto;
 import com.ren.selfbusiness.dto.response.ErrorBody;
 import com.ren.selfbusiness.dto.response.Response;
 import com.ren.selfbusiness.exception.BusinessException;
@@ -15,7 +16,9 @@ public class DefaultAdviceController {
 
     @ExceptionHandler({BusinessException.class})
     public ResponseEntity<?> exceptionHandler(BusinessException e) {
-        log.warn("error code: {} error message: {}", e.getCode(), e.getMessage());
-        return ResponseEntity.status(HttpStatus.OK).body(Response.builder().error(new ErrorBody(e.getCode(), e.getMessage())).build());
+        ErrorDto error = e.getErrorDto();
+        log.warn("error code: {} error message: {}", error.getCode(), error.getMessage());
+        return ResponseEntity.status(error.getHttpStatus())
+                .body(Response.builder().error(new ErrorBody(error.getCode(), error.getMessage())).build());
     }
 }

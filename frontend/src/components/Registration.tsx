@@ -4,25 +4,25 @@ import {
     Container,
     CssBaseline,
     Dialog,
-    DialogActions, DialogContent,
+    DialogActions,
+    DialogContent,
     Grid,
     Paper,
     TextField,
     Typography
 } from "@mui/material";
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 import {useAppDispatch, useAppSelector} from "../hooks/redux";
-import {IAuthData} from "../models/IAuthData";
-import {auth, reg} from "../api/auth";
+import {reg} from "../api/auth";
 import {IRegData} from "../models/IRegData";
 import {MAIN} from "../constants/Urls";
 
 function Registration() {
 
-    const [nameError, setNameError] = useState({helperText:'', error:false});
-    const [emailError, setEmailError] = useState({helperText:'', error:false});
-    const [passwordError, setPasswordError] = useState({helperText:'', error:false});
-    const [confirmError, setConfirmError] = useState({helperText:'', error:false});
+    const [nameError, setNameError] = useState({helperText: '', error: false});
+    const [emailError, setEmailError] = useState({helperText: '', error: false});
+    const [passwordError, setPasswordError] = useState({helperText: '', error: false});
+    const [confirmError, setConfirmError] = useState({helperText: '', error: false});
 
 
     const [dialog, setDialog] = useState(false);
@@ -39,10 +39,10 @@ function Registration() {
         let name = data.get("name");
         let password = data.get("password");
         let confirmPassword = data.get("confirmPassword");
-        
+
         if (email && password && confirmPassword && name
             && password === confirmPassword) {
-            const regData : IRegData = {
+            const regData: IRegData = {
                 email: email.toString(),
                 name: name.toString(),
                 password: password.toString()
@@ -50,9 +50,8 @@ function Registration() {
             dispatch(reg(regData))
             if (message)
                 console.log(message);
-                setDialog(true);
-        }
-        else {
+            setDialog(true);
+        } else {
             if (!email) setEmailError({helperText: 'Поле не должно быть пустым', error: true})
             if (!name) setNameError({helperText: 'Поле не должно быть пустым', error: true})
             if (!password) setPasswordError({helperText: 'Поле не должно быть пустым', error: true})
@@ -61,7 +60,9 @@ function Registration() {
         }
     };
 
-    const forward = () => {window.location.href = MAIN;}
+    const forward = () => {
+        window.location.href = MAIN;
+    }
 
     return (
         <Container maxWidth="sm">
@@ -106,7 +107,7 @@ function Registration() {
                                 <TextField
                                     helperText={emailError.helperText}
                                     error={emailError.error}
-                                    onChange={() => setEmailError({helperText:'', error:false})}
+                                    onChange={() => setEmailError({helperText: '', error: false})}
                                     margin="normal"
                                     required
                                     fullWidth
@@ -119,7 +120,7 @@ function Registration() {
                                 <TextField
                                     helperText={nameError.helperText}
                                     error={nameError.error}
-                                    onChange={() => setNameError({helperText:'', error:false})}
+                                    onChange={() => setNameError({helperText: '', error: false})}
                                     margin="normal"
                                     required
                                     fullWidth
@@ -131,7 +132,7 @@ function Registration() {
                                 <TextField
                                     helperText={passwordError.helperText}
                                     error={passwordError.error}
-                                    onChange={() => setPasswordError({helperText:'', error:false})}
+                                    onChange={() => setPasswordError({helperText: '', error: false})}
                                     margin="normal"
                                     required
                                     fullWidth
@@ -144,7 +145,7 @@ function Registration() {
                                 <TextField
                                     helperText={confirmError.helperText}
                                     error={confirmError.error}
-                                    onChange={() => setConfirmError({helperText:'', error:false})}
+                                    onChange={() => setConfirmError({helperText: '', error: false})}
                                     margin="normal"
                                     required
                                     fullWidth

@@ -7,6 +7,7 @@ import {resourceTypeSlice} from "../store/reducers/ResourceTypeSlice";
 import {IResourceTypeData} from "../models/IResourceTypeData";
 import {messageSlice} from "../store/reducers/MesageSlice";
 import {IMessage} from "../models/IMessage";
+import {statusResolve} from "../utils/errorUtils";
 
 export const getPageWithResourceTypes = (page: number, size: number) => async (dispatch: AppDispatch) => {
     dispatch(resourceTypeSlice.actions.resourceTypeFetching())
@@ -17,16 +18,17 @@ export const getPageWithResourceTypes = (page: number, size: number) => async (d
         if (response.ok)
             return response.json() as Promise<Response<IPage<IResourceType>>>;
         else {
-            throw response.status;
+            statusResolve(response.status);
         }
     }).then((r => {
-        if (r.error != null) {
-            dispatch(resourceTypeSlice.actions.resourceTypeFetchingError(r.error));
-
-        } else if (r.body != null) {
-            dispatch(resourceTypeSlice.actions.resourceTypeFetchingSuccess(r.body));
+        if (r) {
+            if (r.error != null) {
+                dispatch(resourceTypeSlice.actions.resourceTypeFetchingError(r.error));
+            } else if (r.body != null) {
+                dispatch(resourceTypeSlice.actions.resourceTypeFetchingSuccess(r.body));
+            }
+            return r;
         }
-        return r;
     })).catch(e => {
         console.log(e);
     });
