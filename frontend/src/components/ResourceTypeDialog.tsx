@@ -18,8 +18,8 @@ const ResourceTypeDialog = ({open, handleOpen, handleClose, resourceType = null}
 
     const dispatch = useAppDispatch()
 
-    const [name, setName] = useState<FieldType>({value: '', error: false, helperText: ''});
-    const [unit, setUnit] = useState<FieldType>({value: '', error: false, helperText: ''});
+    const [name, setName] = useState<FieldType<string>>({value: '', error: false, helperText: ''});
+    const [unit, setUnit] = useState<FieldType<string>>({value: '', error: false, helperText: ''});
 
     useEffect(() => {
         if (resourceType != null) {
@@ -36,9 +36,7 @@ const ResourceTypeDialog = ({open, handleOpen, handleClose, resourceType = null}
                 unit: unit.value
             };
             dispatch(addResourceType(data));
-            setName({value: '', error: false, helperText: ''});
-            setUnit({value: '', error: false, helperText: ''});
-            handleClose();
+            close();
         }
     };
 
@@ -49,9 +47,15 @@ const ResourceTypeDialog = ({open, handleOpen, handleClose, resourceType = null}
                 unit: unit.value
             };
             dispatch(updateResourceType(resourceType.id, data));
-            handleClose();
+            close();
         }
     };
+
+    const close = () => {
+        setName({value: '', error: false, helperText: ''});
+        setUnit({value: '', error: false, helperText: ''});
+        handleClose();
+    }
 
     const validateField = (): boolean => {
         if (!name.value) setName({value: name.value, error: true, helperText: 'Поле не должно быть пустым'});
@@ -88,7 +92,7 @@ const ResourceTypeDialog = ({open, handleOpen, handleClose, resourceType = null}
                 />
             </DialogContent>
             <DialogActions>
-                <Button onClick={handleClose}>
+                <Button onClick={close}>
                     Cancel
                 </Button>
                 <Button onClick={resourceType != null ? update : add}>

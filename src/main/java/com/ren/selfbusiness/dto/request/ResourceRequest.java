@@ -1,4 +1,5 @@
 package com.ren.selfbusiness.dto.request;
 
-public class ResourceRequest {
-}
+import java.math.BigDecimal;
+
+public record ResourceRequest(Integer count, BigDecimal unitPrice, Long typeId) {}

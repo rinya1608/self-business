@@ -1,5 +1,5 @@
-export type FieldType = {
-    value: string,
+export type FieldType <V> = {
+    value: V,
     error: boolean,
     helperText: string
 }

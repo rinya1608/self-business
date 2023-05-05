@@ -19,11 +19,13 @@ import {useAppDispatch, useAppSelector} from "../hooks/redux";
 import {getCurrentUser, logout} from "../api/auth";
 import {MAIN} from "../constants/Urls";
 import ResourceTypeDialog from "./ResourceTypeDialog";
+import ResourceDialog from "./ResourceDialog";
 
 const Header = () => {
 
     const [menu, setMenu] = useState(false);
     const [resourceTypeDialog, setResourceTypeDialog] = useState(false);
+    const [resourceDialog, setResourceDialog] = useState(false);
     const [createMenu, setCreateMenu] = React.useState<null | HTMLElement>(null);
 
     const dispatch = useAppDispatch()
@@ -48,6 +50,15 @@ const Header = () => {
 
     const resourceTypeHandleClose = () => {
         setResourceTypeDialog(false);
+        setCreateMenu(null);
+    };
+
+    const resourceHandleOpen = () => {
+        setResourceDialog(true);
+    };
+
+    const resourceHandleClose = () => {
+        setResourceDialog(false);
         setCreateMenu(null);
     };
 
@@ -86,7 +97,8 @@ const Header = () => {
                             open={Boolean(createMenu)}
                             onClose={() => setCreateMenu(null)}
                         >
-                            <MenuItem onClick={() => setResourceTypeDialog(true)}>Resource Type</MenuItem>
+                            <MenuItem onClick={resourceTypeHandleOpen}>Resource Type</MenuItem>
+                            <MenuItem onClick={resourceHandleOpen}>Resource</MenuItem>
                         </Menu>
                     </Box>
                     <Box>
@@ -121,6 +133,7 @@ const Header = () => {
                 </Drawer>
             </React.Fragment>
             <ResourceTypeDialog open={resourceTypeDialog} handleOpen={resourceTypeHandleOpen} handleClose={resourceTypeHandleClose}/>
+            <ResourceDialog open={resourceDialog} handleOpen={resourceHandleOpen} handleClose={resourceHandleClose}/>
         </Box>
     );
 };
