@@ -8,9 +8,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface ResourceService {
-    void addResource(ResourceRequest req, User user);
+    Resource addResource(ResourceRequest req, User user);
 
-    void updateResource(Long id, ResourceRequest req, User user);
+    void updateResource(Long id, ResourceRequest req);
 
     void deleteResource(Long id);
 

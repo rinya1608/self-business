@@ -1,5 +1,5 @@
 export interface IResourceData {
     count: number,
-    unitPrice: number,
+    unitPrice: string,
     typeId: number
 }

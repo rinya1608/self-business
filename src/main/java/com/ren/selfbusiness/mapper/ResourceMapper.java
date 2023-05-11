@@ -12,6 +12,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
+
 @Component
 @AllArgsConstructor
 public class ResourceMapper implements EntityMapper<ResourceBody, Resource, Pair<ResourceRequest, User>> {
@@ -22,14 +24,14 @@ public class ResourceMapper implements EntityMapper<ResourceBody, Resource, Pair
     public ResourceBody toDto(Resource resource) {
         ResourceTypeBody type = mapper.toDto(resource.getType());
         return new ResourceBody(resource.getId(), resource.getCount(),
-                resource.getUnitPrice(), type);
+                resource.getUnitPrice().toString(), type);
     }
 
     @Override
     public Resource toEntity(Pair<ResourceRequest, User> resourceRequestAndUser) {
         ResourceRequest resourceRequest = resourceRequestAndUser.getFirst();
         ResourceType type = resourceTypeService.getResourceTypeById(resourceRequest.typeId());
-        return new Resource(resourceRequest.count(), resourceRequest.unitPrice(),
+        return new Resource(resourceRequest.count(), new BigDecimal(resourceRequest.unitPrice()),
                 type, resourceRequestAndUser.getSecond());
     }
 }

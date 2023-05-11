@@ -4,6 +4,7 @@ import Login from "./components/Login";
 import Registration from "./components/Registration";
 import ResourceType from "./components/ResourceType";
 import Wrapper from "./components/Wrapper";
+import OperationHistory from "./components/OperationHistory";
 
 const App = () => {
     return (
@@ -11,6 +12,7 @@ const App = () => {
             <Route path="/login" element={<Login/>}/>
             <Route path="/registration" element={<Registration/>}/>
             <Route path="/resource-types" element={<Wrapper><ResourceType/></Wrapper>}/>
+            <Route path="/history" element={<Wrapper><OperationHistory/></Wrapper>}/>
         </Routes>
     );
 };

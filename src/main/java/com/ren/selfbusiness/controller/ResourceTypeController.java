@@ -27,9 +27,8 @@ public class ResourceTypeController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateResourceType(@RequestHeader(name = "Authorization") String token,
-                                                @PathVariable Long id, @RequestBody ResourceTypeRequest req) {
-        resourceTypeService.updateResourceType(id, req, userService.parseAndFindByJwt(token));
+    public ResponseEntity<?> updateResourceType(@PathVariable Long id, @RequestBody ResourceTypeRequest req) {
+        resourceTypeService.updateResourceType(id, req);
         return ResponseEntity.ok(Response.<MessageBody>builder().body(new MessageBody("Тип обновлен")).build());
     }
 

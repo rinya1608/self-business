@@ -35,3 +35,4 @@ public class ResourceType {
         this.creator = creator;
     }
 }
+

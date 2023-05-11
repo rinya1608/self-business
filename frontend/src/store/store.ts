@@ -3,13 +3,17 @@ import currentUserReducer from "./reducers/CurrentUserSlice"
 import messageReducer from "./reducers/MesageSlice"
 import resourceTypeReducer from "./reducers/ResourceTypeSlice"
 import resourceReducer from "./reducers/ResourceSlice"
+import transactionReducer from "./reducers/TransactionSlice"
+import purchaseReducer from "./reducers/PurchaseSlice"
 
 
 const rootReducer = combineReducers({
     currentUserReducer,
     messageReducer,
     resourceTypeReducer,
-    resourceReducer
+    resourceReducer,
+    transactionReducer,
+    purchaseReducer
 })
 
 export const setupStore = () => {

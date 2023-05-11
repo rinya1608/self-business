@@ -12,7 +12,7 @@ import java.util.List;
 public interface ResourceTypeService {
     void addResourceType(ResourceTypeRequest req, User user);
 
-    void updateResourceType(Long id, ResourceTypeRequest req, User user);
+    void updateResourceType(Long id, ResourceTypeRequest req);
 
     void deleteResourceType(Long id);
 

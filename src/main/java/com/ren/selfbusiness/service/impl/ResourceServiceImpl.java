@@ -16,6 +16,8 @@ import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
+
 import static com.ren.selfbusiness.constant.ErrorCodeStorage.R_01;
 
 @Service
@@ -28,17 +30,17 @@ public class ResourceServiceImpl implements ResourceService {
 
     @Transactional
     @Override
-    public void addResource(ResourceRequest req, User user) {
+    public Resource addResource(ResourceRequest req, User user) {
         Resource resource = mapper.toEntity(Pair.of(req, user));
-        resourceRepository.save(resource);
+        return resourceRepository.save(resource);
     }
 
     @Transactional
     @Override
-    public void updateResource(Long id, ResourceRequest req, User user) {
+    public void updateResource(Long id, ResourceRequest req) {
         Resource resource = resourceRepository.getReferenceById(id);
         if (req.count() != null) resource.setCount(req.count());
-        if (req.unitPrice() != null) resource.setUnitPrice(req.unitPrice());
+        if (req.unitPrice() != null) resource.setUnitPrice(new BigDecimal(req.unitPrice()));
         if (req.typeId() != null) resource.setType(resourceTypeService.getResourceTypeById(req.typeId()));
     }
 

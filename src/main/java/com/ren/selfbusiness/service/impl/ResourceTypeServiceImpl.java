@@ -34,7 +34,7 @@ public class ResourceTypeServiceImpl implements ResourceTypeService {
 
     @Transactional
     @Override
-    public void updateResourceType(Long id, ResourceTypeRequest req, User user) {
+    public void updateResourceType(Long id, ResourceTypeRequest req) {
         ResourceType resourceType = getResourceTypeById(id);
         if (StringUtils.isNotBlank(req.name())) {
             resourceType.setName(req.name());

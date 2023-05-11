@@ -19,12 +19,15 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import {MessageState} from "../store/reducers/MesageSlice";
 import {IResourceType} from "../models/IResourceType";
 import ResourceTypeDialog from "./ResourceTypeDialog";
+import AddBoxIcon from '@mui/icons-material/AddBox';
+import ResourceDialog from "./ResourceDialog";
 
 const ResourceType = () => {
 
     const [page, setPage] = React.useState(1);
     const [pageCount, setPageCount] = React.useState(1);
     const [resourceTypeDialog, setResourceTypeDialog] = useState(false);
+    const [resourceDialog, setResourceDialog] = useState(false);
     const [resourceType, setResourceType] = useState<IResourceType | null>(null);
 
     const dispatch = useAppDispatch()
@@ -66,14 +69,29 @@ const ResourceType = () => {
         setResourceTypeDialog(false);
     };
 
+    const resourceHandleOpen = (el: IResourceType) => {
+        setResourceType(el);
+        setResourceDialog(true);
+    };
+
+    const resourceHandleClose = () => {
+        setResourceDialog(false);
+    };
+
     var resourceTypeItems = resourceTypePage?.content.map((el) => {
         return (
             <ListItem
                 key={el.id}
                 secondaryAction={
-                    <IconButton edge="end" aria-label="delete" onClick={() => handleDelete(el.id)}>
-                        <DeleteIcon/>
-                    </IconButton>
+                    <Box>
+                        <IconButton edge="end" aria-label="add" color="primary" onClick={() => resourceHandleOpen(el)}>
+                            <AddBoxIcon/>
+                        </IconButton>
+                        <IconButton edge="end" aria-label="delete" onClick={() => handleDelete(el.id)}>
+                            <DeleteIcon/>
+                        </IconButton>
+                    </Box>
+
                 }
                 disablePadding
             >
@@ -124,6 +142,7 @@ const ResourceType = () => {
             </Box>
             <ResourceTypeDialog open={resourceTypeDialog} handleOpen={resourceTypeHandleOpen}
                                 handleClose={resourceTypeHandleClose} resourceType={resourceType}/>
+            <ResourceDialog open={resourceDialog} handleOpen={resourceHandleOpen} handleClose={resourceHandleClose} resourceType={resourceType}/>
         </Container>
     );
 };
