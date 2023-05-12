@@ -41,8 +41,10 @@ public class ResourceController {
     }
 
     @GetMapping
-    public ResponseEntity<?> getResources(@RequestParam(defaultValue = "5") int size, @RequestParam(defaultValue = "0") int page) {
-        Page<ResourceBody> resourceBodies = resourceService.getAll(PageRequest.of(page, size));
+    public ResponseEntity<?> getResources(@RequestHeader(name = "Authorization") String token,
+                                          @RequestParam(defaultValue = "5") int size,
+                                          @RequestParam(defaultValue = "0") int page) {
+        Page<ResourceBody> resourceBodies = resourceService.getAll(PageRequest.of(page, size), userService.parseAndFindByJwt(token));
         return ResponseEntity.ok(Response.<Page<ResourceBody>>builder().body(resourceBodies).build());
     }
 }

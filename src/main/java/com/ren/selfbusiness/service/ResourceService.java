@@ -14,7 +14,7 @@ public interface ResourceService {
 
     void deleteResource(Long id);
 
-    Page<ResourceBody> getAll(Pageable pageable);
+    Page<ResourceBody> getAll(Pageable pageable, User user);
 
     Resource getResourceTypeById(Long id);
 }

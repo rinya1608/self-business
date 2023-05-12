@@ -35,7 +35,7 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    public Page<TransactionBody> getAll(Pageable pageable) {
-        return transactionRepository.findAll(pageable).map(mapper::toDto);
+    public Page<TransactionBody> getAll(Pageable pageable, User user) {
+        return transactionRepository.findAllByUser(pageable, user).map(mapper::toDto);
     }
 }

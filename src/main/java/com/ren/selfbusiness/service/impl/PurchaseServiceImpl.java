@@ -31,7 +31,7 @@ public class PurchaseServiceImpl implements PurchaseService {
     }
 
     @Override
-    public Page<PurchaseBody> getAll(Pageable pageable) {
-        return purchaseRepository.findAll(pageable).map(mapper::toDto);
+    public Page<PurchaseBody> getAll(Pageable pageable, User user) {
+        return purchaseRepository.findAllByUser(pageable, user).map(mapper::toDto);
     }
 }

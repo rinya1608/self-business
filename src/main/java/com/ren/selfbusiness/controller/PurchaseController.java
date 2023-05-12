@@ -27,8 +27,11 @@ public class PurchaseController {
     }
 
     @GetMapping
-    public ResponseEntity<?> getPurchases(@RequestParam(defaultValue = "5") int size, @RequestParam(defaultValue = "0") int page) {
-        Page<PurchaseBody> purchaseBodies = purchaseService.getAll(PageRequest.of(page, size));
+    public ResponseEntity<?> getPurchases(@RequestHeader(name = "Authorization") String token,
+                                          @RequestParam(defaultValue = "5") int size,
+                                          @RequestParam(defaultValue = "0") int page) {
+        Page<PurchaseBody> purchaseBodies = purchaseService.getAll(PageRequest.of(page, size),
+                userService.parseAndFindByJwt(token));
         return ResponseEntity.ok(Response.<Page<PurchaseBody>>builder().body(purchaseBodies).build());
     }
 }

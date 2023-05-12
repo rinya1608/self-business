@@ -22,10 +22,14 @@ import org.springframework.web.bind.annotation.*;
 public class TransactionController {
 
     private final TransactionService transactionService;
+    private final UserService userService;
 
     @GetMapping
-    public ResponseEntity<?> getTransactions(@RequestParam(defaultValue = "5") int size, @RequestParam(defaultValue = "0") int page) {
-        Page<TransactionBody> transactionBodies = transactionService.getAll(PageRequest.of(page, size, Sort.by("date")));
+    public ResponseEntity<?> getTransactions(@RequestHeader(name = "Authorization") String token,
+                                             @RequestParam(defaultValue = "5") int size,
+                                             @RequestParam(defaultValue = "0") int page) {
+        Page<TransactionBody> transactionBodies = transactionService.getAll(PageRequest.of(page, size, Sort.by("date")),
+                userService.parseAndFindByJwt(token));
         return ResponseEntity.ok(Response.<Page<TransactionBody>>builder().body(transactionBodies).build());
     }
 }

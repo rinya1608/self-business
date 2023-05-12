@@ -11,5 +11,5 @@ public interface PurchaseService {
 
     void deletePurchase(Long id);
 
-    Page<PurchaseBody> getAll(Pageable pageable);
+    Page<PurchaseBody> getAll(Pageable pageable, User user);
 }

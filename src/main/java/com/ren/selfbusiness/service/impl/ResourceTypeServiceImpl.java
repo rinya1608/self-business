@@ -51,8 +51,8 @@ public class ResourceTypeServiceImpl implements ResourceTypeService {
     }
 
     @Override
-    public Page<ResourceTypeBody> getAll(Pageable pageable) {
-        return resourceTypeRepository.findAll(pageable).map(mapper::toDto);
+    public Page<ResourceTypeBody> getAll(Pageable pageable, User user) {
+        return resourceTypeRepository.findAllByCreator(pageable, user).map(mapper::toDto);
     }
 
     @Override

@@ -12,5 +12,5 @@ public interface TransactionService {
 
     void deleteTransaction(Long id);
 
-    Page<TransactionBody> getAll(Pageable pageable);
+    Page<TransactionBody> getAll(Pageable pageable, User user);
 }
