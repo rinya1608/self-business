@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import static com.ren.selfbusiness.constant.ErrorCodeStorage.RT_01;
 
 @Service
+@Transactional(readOnly = true)
 @AllArgsConstructor
 public class ResourceTypeServiceImpl implements ResourceTypeService {
     private final ResourceTypeRepository resourceTypeRepository;

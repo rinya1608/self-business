@@ -21,6 +21,7 @@ import java.math.BigDecimal;
 import static com.ren.selfbusiness.constant.ErrorCodeStorage.R_01;
 
 @Service
+@Transactional(readOnly = true)
 @AllArgsConstructor
 public class ResourceServiceImpl implements ResourceService {
     private final ResourceRepository resourceRepository;

@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @AllArgsConstructor
+@Transactional(readOnly = true)
 @Service
 public class TransactionServiceImpl implements TransactionService {
 

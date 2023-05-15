@@ -10,12 +10,10 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 @NoArgsConstructor
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Resource {
     @Id
     @SequenceGenerator(name = "resource_seq", sequenceName = "resource_sequence", allocationSize = 20)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "resource_seq")
-    @EqualsAndHashCode.Include()
     @Setter(AccessLevel.NONE)
     private Long id;
 

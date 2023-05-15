@@ -14,14 +14,12 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Table(name = "usr")
 public class User implements UserDetails {
 
     @Id
     @SequenceGenerator(name = "user_seq", sequenceName = "user_sequence", allocationSize = 20)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_seq")
-    @EqualsAndHashCode.Include()
     private Long Id;
     @Column(unique = true)
     private String email;

@@ -10,12 +10,10 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @NoArgsConstructor
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Transaction {
     @Id
     @SequenceGenerator(name = "transaction_seq", sequenceName = "transaction_sequence", allocationSize = 20)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "transaction_seq")
-    @EqualsAndHashCode.Include()
     @Setter(AccessLevel.NONE)
     private Long id;
 

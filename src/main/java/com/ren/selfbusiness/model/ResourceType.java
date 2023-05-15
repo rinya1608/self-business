@@ -10,12 +10,10 @@ import javax.validation.constraints.NotNull;
 @Getter
 @Setter
 @NoArgsConstructor
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class ResourceType {
     @Id
     @SequenceGenerator(name = "resource_type_seq", sequenceName = "resource_type_sequence", allocationSize = 20)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "resource_type_seq")
-    @EqualsAndHashCode.Include()
     @Setter(AccessLevel.NONE)
     private Long id;
 

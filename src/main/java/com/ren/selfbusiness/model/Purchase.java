@@ -7,12 +7,10 @@ import lombok.*;
 @Getter
 @Setter
 @NoArgsConstructor
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Purchase {
     @Id
     @SequenceGenerator(name = "purchase_seq", sequenceName = "purchase_sequence", allocationSize = 20)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "purchase_seq")
-    @EqualsAndHashCode.Include()
     @Setter(AccessLevel.NONE)
     private Long id;
 

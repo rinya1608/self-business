@@ -15,10 +15,12 @@ import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @AllArgsConstructor
 @Log4j2
+@Transactional(readOnly = true)
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final JwtHelper jwtHelper;
@@ -33,6 +35,7 @@ public class UserServiceImpl implements UserService {
         return Response.<JwtUserBody>builder().body(new JwtUserBody(newJwt, mapper.toDto(user))).build();
     }
 
+    @Transactional
     @Override
     public void addUser(RegistrationRequest req) {
         if (userExists(req.getEmail()))
