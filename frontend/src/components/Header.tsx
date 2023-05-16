@@ -20,11 +20,13 @@ import {getCurrentUser, logout} from "../api/auth";
 import {MAIN} from "../constants/Urls";
 import ResourceTypeDialog from "./ResourceTypeDialog";
 import ResourceDialog from "./ResourceDialog";
+import TemplateDialog from "./TemplateDialog";
 
 const Header = () => {
 
     const [menu, setMenu] = useState(false);
     const [resourceTypeDialog, setResourceTypeDialog] = useState(false);
+    const [templateDialog, setTemplateDialog] = useState(false);
     const [createMenu, setCreateMenu] = React.useState<null | HTMLElement>(null);
 
     const dispatch = useAppDispatch()
@@ -49,6 +51,15 @@ const Header = () => {
 
     const resourceTypeHandleClose = () => {
         setResourceTypeDialog(false);
+        setCreateMenu(null);
+    };
+
+    const templateHandleOpen = () => {
+        setTemplateDialog(true);
+    };
+
+    const templateHandleClose = () => {
+        setTemplateDialog(false);
         setCreateMenu(null);
     };
 
@@ -88,6 +99,7 @@ const Header = () => {
                             onClose={() => setCreateMenu(null)}
                         >
                             <MenuItem onClick={resourceTypeHandleOpen}>Resource Type</MenuItem>
+                            <MenuItem onClick={templateHandleOpen}>Template</MenuItem>
                         </Menu>
                     </Box>
                     <Box>
@@ -122,6 +134,7 @@ const Header = () => {
                 </Drawer>
             </React.Fragment>
             <ResourceTypeDialog open={resourceTypeDialog} handleOpen={resourceTypeHandleOpen} handleClose={resourceTypeHandleClose}/>
+            <TemplateDialog open={templateDialog} handleOpen={templateHandleOpen} handleClose={templateHandleClose}/>
         </Box>
     );
 };

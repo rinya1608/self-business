@@ -5,6 +5,7 @@ import lombok.*;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @Entity
 @Getter
@@ -27,10 +28,17 @@ public class ResourceType {
     @NotNull
     private User creator;
 
+    @OneToMany(mappedBy = "type", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Resource> resources;
+
     public ResourceType(String name, String unit, User creator) {
         this.name = name;
         this.unit = unit;
         this.creator = creator;
+    }
+
+    public Integer getCount() {
+        return resources.stream().map(Resource::getCount).reduce(0, Integer::sum);
     }
 }
 

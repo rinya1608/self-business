@@ -38,6 +38,18 @@ public class Transaction {
     )
     private Resource resource;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "sale",
+            joinColumns = {
+                    @JoinColumn(name = "transaction_id"),
+            },
+            inverseJoinColumns = {
+                    @JoinColumn(name = "template_id")
+            }
+    )
+    private Template template;
+
     public Transaction(BigDecimal sum, User user) {
         this.sum = sum;
         this.user = user;

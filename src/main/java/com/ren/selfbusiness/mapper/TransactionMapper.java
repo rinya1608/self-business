@@ -1,10 +1,13 @@
 package com.ren.selfbusiness.mapper;
 
 import com.ren.selfbusiness.dto.request.ResourceRequest;
+import com.ren.selfbusiness.dto.request.TemplateRequest;
 import com.ren.selfbusiness.dto.request.TransactionRequest;
 import com.ren.selfbusiness.dto.response.ResourceBody;
+import com.ren.selfbusiness.dto.response.TemplateBody;
 import com.ren.selfbusiness.dto.response.TransactionBody;
 import com.ren.selfbusiness.model.Resource;
+import com.ren.selfbusiness.model.Template;
 import com.ren.selfbusiness.model.Transaction;
 import com.ren.selfbusiness.model.User;
 import lombok.AllArgsConstructor;
@@ -17,10 +20,13 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Component
 public class TransactionMapper implements EntityMapper<TransactionBody, Transaction, Pair<TransactionRequest, User>> {
-    EntityMapper<ResourceBody, Resource, Pair<ResourceRequest, User>> resourceMapper;
+    private final EntityMapper<ResourceBody, Resource, Pair<ResourceRequest, User>> resourceMapper;
+    private final EntityMapper<TemplateBody, Template, Pair<TemplateRequest, User>> templateMapper;
     @Override
     public TransactionBody toDto(Transaction transaction) {
-        return new TransactionBody(transaction.getId(), transaction.getDate().toString(), transaction.getSum().toString(), resourceMapper.toDto(transaction.getResource()));
+        if (transaction.getResource() != null)
+            return new TransactionBody(transaction.getId(), transaction.getDate().toString(), transaction.getSum().toString(), resourceMapper.toDto(transaction.getResource()), null);
+        else return new TransactionBody(transaction.getId(), transaction.getDate().toString(), transaction.getSum().toString(), null, templateMapper.toDto(transaction.getTemplate()));
     }
 
     @Override

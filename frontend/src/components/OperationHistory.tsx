@@ -1,11 +1,12 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import {Avatar, Box, Container, List, ListItem, ListItemAvatar, ListItemText, Pagination} from "@mui/material";
 import {useAppDispatch, useAppSelector} from "../hooks/redux";
 import {TransactionSlice} from "../store/reducers/TransactionSlice";
 import CategoryIcon from '@mui/icons-material/Category';
 import {MessageState} from "../store/reducers/MesageSlice";
-import {IResourceType} from "../models/IResourceType";
 import {getPageWithTransaction} from "../api/transaction";
+import TrendingUpIcon from '@mui/icons-material/TrendingUp';
+import TrendingDownIcon from '@mui/icons-material/TrendingDown';
 
 const OperationHistory = () => {
 
@@ -35,21 +36,44 @@ const OperationHistory = () => {
     };
 
     const transactionItems = transactionPage?.content.map((el) => {
+        console.log(el)
         return (
-            <ListItem
-                key={el.id}
-                disablePadding
-            >
-                <ListItemAvatar>
-                    <Avatar>
-                        <CategoryIcon/>
-                    </Avatar>
-                </ListItemAvatar>
-                <ListItemText
-                    primary={el.resource.type.name}/>
-                <ListItemText
-                    primary={el.sum}/>
-            </ListItem>
+            el.resource ?
+                <ListItem
+                    key={el.id}
+                    disablePadding
+                    sx={{
+                        mt: 2
+                    }}
+                >
+                    <ListItemAvatar>
+                        <Avatar>
+                            <TrendingDownIcon/>
+                        </Avatar>
+                    </ListItemAvatar>
+                    <ListItemText
+                        primary={el.resource.type.name}/>
+                    <ListItemText
+                        primary={el.sum}/>
+                </ListItem>
+                :
+                <ListItem
+                    key={el.id}
+                    disablePadding
+                    sx={{
+                        mt: 2
+                    }}
+                >
+                    <ListItemAvatar>
+                        <Avatar>
+                            <TrendingUpIcon/>
+                        </Avatar>
+                    </ListItemAvatar>
+                    <ListItemText
+                        primary={el.template?.name}/>
+                    <ListItemText
+                        primary={el.sum}/>
+                </ListItem>
         )
     });
 

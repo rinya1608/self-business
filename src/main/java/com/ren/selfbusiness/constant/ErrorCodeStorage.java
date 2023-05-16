@@ -7,4 +7,5 @@ public class ErrorCodeStorage {
     public static final String REG_02 = "REG_02";
     public static final String RT_01 = "RT_01";
     public static final String R_01 = "R_01";
+    public static final String T_01 = "T_01";
 }

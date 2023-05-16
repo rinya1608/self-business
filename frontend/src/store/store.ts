@@ -5,6 +5,7 @@ import resourceTypeReducer from "./reducers/ResourceTypeSlice"
 import resourceReducer from "./reducers/ResourceSlice"
 import transactionReducer from "./reducers/TransactionSlice"
 import purchaseReducer from "./reducers/PurchaseSlice"
+import templateReducer from "./reducers/TemplateSlice"
 
 
 const rootReducer = combineReducers({
@@ -13,7 +14,8 @@ const rootReducer = combineReducers({
     resourceTypeReducer,
     resourceReducer,
     transactionReducer,
-    purchaseReducer
+    purchaseReducer,
+    templateReducer
 })
 
 export const setupStore = () => {
