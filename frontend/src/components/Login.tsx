@@ -69,7 +69,7 @@ function Login() {
                             }}
                         >
                             <Typography component="h1" variant="h5">
-                                Sign in
+                                Вход
                             </Typography>
                             <Box
                                 component="form"
@@ -86,7 +86,7 @@ function Login() {
                                     required
                                     fullWidth
                                     id="email"
-                                    label="Email Address"
+                                    label="Email"
                                     name="email"
                                     autoComplete="email"
                                     autoFocus
@@ -99,7 +99,7 @@ function Login() {
                                     required
                                     fullWidth
                                     name="password"
-                                    label="Password"
+                                    label="Пароль"
                                     type="password"
                                     id="password"
                                     autoComplete="current-password"
@@ -110,14 +110,14 @@ function Login() {
                                     variant="contained"
                                     sx={{mt: 3, mb: 2}}
                                 >
-                                    Sign In
+                                    Войти
                                 </Button>
                                 <Grid container>
                                     <Grid item xs>
                                     </Grid>
                                     <Grid item>
                                         <Link href="/registration" variant="body2">
-                                            {"Don't have an account? Sign Up"}
+                                            {"Нет аккаунта? Зарегистрироваться"}
                                         </Link>
                                     </Grid>
                                 </Grid>

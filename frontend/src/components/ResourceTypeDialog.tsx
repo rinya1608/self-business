@@ -65,7 +65,7 @@ const ResourceTypeDialog = ({open, handleOpen, handleClose, resourceType = null}
 
     return (
         <Dialog open={open} onClose={handleOpen} aria-labelledby="form-dialog-title">
-            <DialogTitle id="form-dialog-title">Add resource type</DialogTitle>
+            <DialogTitle id="form-dialog-title">{resourceType != null ? 'Изменить' : 'Добавить'} тип ресурса</DialogTitle>
             <DialogContent>
                 <TextField
                     autoFocus
@@ -75,7 +75,7 @@ const ResourceTypeDialog = ({open, handleOpen, handleClose, resourceType = null}
                     onChange={(e) => setName({value: e.target.value, error: false, helperText: ''})}
                     margin="dense"
                     id="name"
-                    label="Name"
+                    label="Название"
                     type="text"
                     fullWidth
                 />
@@ -86,7 +86,7 @@ const ResourceTypeDialog = ({open, handleOpen, handleClose, resourceType = null}
                     onChange={(e) => setUnit({value: e.target.value, error: false, helperText: ''})}
                     margin="dense"
                     id="unit"
-                    label="Unit"
+                    label="Ед. измерения"
                     type="text"
                     fullWidth
                 />
@@ -96,7 +96,7 @@ const ResourceTypeDialog = ({open, handleOpen, handleClose, resourceType = null}
                     Cancel
                 </Button>
                 <Button onClick={resourceType != null ? update : add}>
-                    {resourceType != null ? 'Save' : 'Add'}
+                    {resourceType != null ? 'Сохранить' : 'Создать'}
                 </Button>
             </DialogActions>
         </Dialog>

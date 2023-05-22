@@ -7,7 +7,7 @@ import {
     DialogContent,
     DialogTitle,
     FormControl,
-    IconButton,
+    IconButton, InputAdornment,
     InputLabel,
     MenuItem,
     Select,
@@ -169,7 +169,7 @@ const TemplateDialog = ({open, handleOpen, handleClose, template = null}: Props)
                         labelId="demo-simple-select-helper-label"
                         id="demo-simple-select-helper"
                         value={el.resourceType.value ? String(el.resourceType.value.id) : ''}
-                        label="Type"
+                        label="Тип"
                         onChange={event => handleTypeChange(event, index)}
                     >
                         {
@@ -185,7 +185,7 @@ const TemplateDialog = ({open, handleOpen, handleClose, template = null}: Props)
                     onChange={event => handleCountChange(event, index)}
                     margin="dense"
                     id="count"
-                    label={el.resourceType.value ? el.resourceType.value.unit + " count" : "Count"}
+                    label={el.resourceType.value ? el.resourceType.value.unit : "Кол-во"}
                     type="text"
                     fullWidth
                     sx={{ml: 2}}
@@ -209,11 +209,18 @@ const TemplateDialog = ({open, handleOpen, handleClose, template = null}: Props)
                     onChange={(e) => setName({value: e.target.value, error: false, helperText: ''})}
                     margin="dense"
                     id="name"
-                    label="Name"
+                    label="Название"
                     type="text"
                     fullWidth
                 />
                 <TextField
+                    InputProps={{
+                        startAdornment: (
+                            <InputAdornment position="start">
+                                ₽
+                            </InputAdornment>
+                        ),
+                    }}
                     autoFocus
                     error={cost.error}
                     helperText={cost.helperText}
@@ -221,18 +228,18 @@ const TemplateDialog = ({open, handleOpen, handleClose, template = null}: Props)
                     onChange={handleCostChange}
                     margin="dense"
                     id="cost"
-                    label="Cost"
+                    label="Цена"
                     type="text"
                     fullWidth
                 />
-                <DialogTitle id="-title">Ingredients</DialogTitle>
+                <DialogTitle id="-title">Ингредиенты</DialogTitle>
                 {
                     ingredientsFields
                 }
                 {
                     ingredients.length != resourceTypePage?.totalElements ?
                         <Button onClick={addIngredientField}>
-                            Add ingredient
+                            Добавить ингредиент
                         </Button>
                         : null
                 }
@@ -240,10 +247,10 @@ const TemplateDialog = ({open, handleOpen, handleClose, template = null}: Props)
             <DialogActions>
 
                 <Button onClick={close}>
-                    Cancel
+                    Отменить
                 </Button>
                 <Button onClick={add}>
-                    {'Add'}
+                    Создать
                 </Button>
             </DialogActions>
         </Dialog>

@@ -95,7 +95,7 @@ function Registration() {
                             }}
                         >
                             <Typography component="h1" variant="h5">
-                                Sign up
+                                Регистрация
                             </Typography>
                             <Box
                                 component="form"
@@ -112,7 +112,7 @@ function Registration() {
                                     required
                                     fullWidth
                                     id="email"
-                                    label="Email Address"
+                                    label="Email"
                                     name="email"
                                     autoComplete="email"
                                     autoFocus
@@ -125,7 +125,7 @@ function Registration() {
                                     required
                                     fullWidth
                                     id="name"
-                                    label="Name"
+                                    label="Имя"
                                     name="name"
                                     autoComplete="name"
                                 />
@@ -137,7 +137,7 @@ function Registration() {
                                     required
                                     fullWidth
                                     name="password"
-                                    label="Password"
+                                    label="Пароль"
                                     type="password"
                                     id="password"
                                     autoComplete="current-password"
@@ -150,7 +150,7 @@ function Registration() {
                                     required
                                     fullWidth
                                     name="confirmPassword"
-                                    label="Confirm password"
+                                    label="Пароль еще раз"
                                     type="password"
                                     id="confirmPassword"
                                 />
@@ -160,7 +160,7 @@ function Registration() {
                                     variant="contained"
                                     sx={{mt: 3, mb: 2}}
                                 >
-                                    Sign up
+                                    Зарегистрироваться
                                 </Button>
                             </Box>
                         </Box>

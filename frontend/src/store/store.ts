@@ -4,6 +4,7 @@ import messageReducer from "./reducers/MesageSlice"
 import resourceTypeReducer from "./reducers/ResourceTypeSlice"
 import resourceReducer from "./reducers/ResourceSlice"
 import transactionReducer from "./reducers/TransactionSlice"
+import transactionStatisticReducer from "./reducers/TransactionStatisticSlice"
 import purchaseReducer from "./reducers/PurchaseSlice"
 import templateReducer from "./reducers/TemplateSlice"
 
@@ -14,6 +15,7 @@ const rootReducer = combineReducers({
     resourceTypeReducer,
     resourceReducer,
     transactionReducer,
+    transactionStatisticReducer,
     purchaseReducer,
     templateReducer
 })

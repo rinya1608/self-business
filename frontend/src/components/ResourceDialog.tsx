@@ -7,6 +7,7 @@ import {
     DialogContent,
     DialogTitle,
     FormControl,
+    InputAdornment,
     InputLabel,
     MenuItem,
     Select,
@@ -77,9 +78,17 @@ const ResourceDialog = ({open, handleOpen, handleClose, resourceType}: Props) =>
 
     const handleCountChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         let value = parseFloat(event.target.value);
-        if (!isNaN(value)) {
-            setCount({value: value, error: false, helperText: ''});
-            setUnitPrice({value: String(parseFloat(sum.value) / value), error: false, helperText: ''});
+        if (!isNaN(value) || !value) {
+            setCount({value: 0, error: false, helperText: ''});
+            if (!value) {
+                setSum({value: "0", error: false, helperText: ''});
+                setUnitPrice({value: "0", error: false, helperText: ''});
+            }
+            else {
+                if (unitPrice.value && parseFloat(unitPrice.value) != 0)
+                    setSum({value: String(parseFloat(unitPrice.value) / value), error: false, helperText: ''});
+                else setUnitPrice({value: String(parseFloat(sum.value) / value), error: false, helperText: ''});
+            }
         } else setCount({value: count.value, error: true, helperText: 'Значение должно быть числовым'});
     }
 
@@ -107,7 +116,7 @@ const ResourceDialog = ({open, handleOpen, handleClose, resourceType}: Props) =>
 
     return (
         <Dialog open={open} onClose={handleOpen} aria-labelledby="form-dialog-title">
-            <DialogTitle id="form-dialog-title">Add resource for {resourceType?.name}</DialogTitle>
+            <DialogTitle id="form-dialog-title">Добавить ресурс для {resourceType?.name}</DialogTitle>
             <DialogContent>
                 <TextField
                     autoFocus
@@ -117,30 +126,44 @@ const ResourceDialog = ({open, handleOpen, handleClose, resourceType}: Props) =>
                     onChange={handleCountChange}
                     margin="dense"
                     id="count"
-                    label="Count"
+                    label="Количество"
                     type="text"
                     fullWidth
                 />
                 <Box>
                     <TextField
+                        InputProps={{
+                            startAdornment: (
+                                <InputAdornment position="start">
+                                    ₽
+                                </InputAdornment>
+                            ),
+                        }}
                         value={unitPrice.value}
                         error={unitPrice.error}
                         helperText={unitPrice.helperText}
                         onChange={handleUnitPriceChange}
                         margin="dense"
                         id="unitPrice"
-                        label={"Price for " + resourceType?.unit}
+                        label={"Цена за " + resourceType?.unit}
                         type="text"
                         fullWidth
                     />
                     <TextField
+                        InputProps={{
+                            startAdornment: (
+                                <InputAdornment position="start">
+                                    ₽
+                                </InputAdornment>
+                            ),
+                        }}
                         value={sum.value}
                         error={sum.error}
                         helperText={sum.helperText}
                         onChange={handleSumChange}
                         margin="dense"
                         id="sum"
-                        label={"Sum"}
+                        label={"Цена"}
                         type="text"
                         fullWidth
                     />
@@ -148,10 +171,10 @@ const ResourceDialog = ({open, handleOpen, handleClose, resourceType}: Props) =>
             </DialogContent>
             <DialogActions>
                 <Button onClick={close}>
-                    Cancel
+                    Отменить
                 </Button>
                 <Button onClick={add}>
-                    {'Add'}
+                    Создать
                 </Button>
             </DialogActions>
         </Dialog>

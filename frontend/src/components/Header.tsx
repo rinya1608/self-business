@@ -22,6 +22,12 @@ import ResourceTypeDialog from "./ResourceTypeDialog";
 import ResourceDialog from "./ResourceDialog";
 import TemplateDialog from "./TemplateDialog";
 
+
+interface DrawerListEl {
+    text: string,
+    href: string
+}
+
 const Header = () => {
 
     const [menu, setMenu] = useState(false);
@@ -89,7 +95,7 @@ const Header = () => {
                         <Button size="medium" variant="contained" onClick={createMenuHandleClick} sx={{
                             ml: 5,
                         }}>
-                            Create
+                            Создать
                         </Button>
                         <Menu
                             id="simple-menu"
@@ -98,14 +104,14 @@ const Header = () => {
                             open={Boolean(createMenu)}
                             onClose={() => setCreateMenu(null)}
                         >
-                            <MenuItem onClick={resourceTypeHandleOpen}>Resource Type</MenuItem>
-                            <MenuItem onClick={templateHandleOpen}>Template</MenuItem>
+                            <MenuItem onClick={resourceTypeHandleOpen}>Тип ресурсов</MenuItem>
+                            <MenuItem onClick={templateHandleOpen}>Шаблон</MenuItem>
                         </Menu>
                     </Box>
                     <Box>
                         {
-                            user ? <Button color="inherit" onClick={logoutEvent}>Logout</Button>
-                                : <Button color="inherit" href={"/login"}>Login</Button>
+                            user ? <Button color="inherit" onClick={logoutEvent}>Выйти</Button>
+                                : <Button color="inherit" href={"/login"}>Войти</Button>
                         }
                     </Box>
                 </Toolbar>
@@ -122,10 +128,13 @@ const Header = () => {
                         onClick={() => setMenu(true)}
                     >
                         <List>
-                            {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-                                <ListItem key={text} disablePadding>
-                                    <ListItemButton>
-                                        <ListItemText primary={text}/>
+                            {[{text: "Типы ресурсов", href: "/resource-types"},
+                                {text: "Шаблоны", href: "/template"},
+                                {text: "История операций", href: "/history"},
+                                {text: "Статистика", href: "/statistic"}].map((el: DrawerListEl, index) => (
+                                <ListItem key={index} disablePadding>
+                                    <ListItemButton type="link" href={el.href}>
+                                        <ListItemText primary={el.text}/>
                                     </ListItemButton>
                                 </ListItem>
                             ))}
