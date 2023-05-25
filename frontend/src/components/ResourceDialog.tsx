@@ -77,17 +77,18 @@ const ResourceDialog = ({open, handleOpen, handleClose, resourceType}: Props) =>
     }
 
     const handleCountChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        let value = parseFloat(event.target.value);
-        if (!isNaN(value) || !value) {
-            setCount({value: 0, error: false, helperText: ''});
+        let value = event.target.value;
+        let num = parseFloat(value);
+        if (!isNaN(num) || !value) {
+            setCount({value: num, error: false, helperText: ''});
             if (!value) {
                 setSum({value: "0", error: false, helperText: ''});
                 setUnitPrice({value: "0", error: false, helperText: ''});
             }
             else {
                 if (unitPrice.value && parseFloat(unitPrice.value) != 0)
-                    setSum({value: String(parseFloat(unitPrice.value) / value), error: false, helperText: ''});
-                else setUnitPrice({value: String(parseFloat(sum.value) / value), error: false, helperText: ''});
+                    setSum({value: String(parseFloat(unitPrice.value) / num), error: false, helperText: ''});
+                else setUnitPrice({value: String(parseFloat(sum.value) / num), error: false, helperText: ''});
             }
         } else setCount({value: count.value, error: true, helperText: 'Значение должно быть числовым'});
     }

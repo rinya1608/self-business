@@ -5,6 +5,7 @@ import lombok.*;
 
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
+import java.util.List;
 
 @Entity
 @Getter
@@ -29,6 +30,9 @@ public class Resource {
     @NotNull
     private User creator;
 
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<History> history;
+
     public Resource(Integer count, BigDecimal unitPrice, ResourceType type, User creator) {
         this.count = count;
         this.unitPrice = unitPrice;
@@ -38,5 +42,13 @@ public class Resource {
 
     public BigDecimal getFullPrice() {
         return unitPrice.multiply(BigDecimal.valueOf(count));
+    }
+
+    public void addResourceHistory(History history) {
+        this.history.add(history);
+    }
+
+    public void removeResourceHistory(History history) {
+        this.history.remove(history);
     }
 }
