@@ -6,6 +6,7 @@ import com.ren.selfbusiness.dto.response.JwtUserBody;
 import com.ren.selfbusiness.dto.response.MessageBody;
 import com.ren.selfbusiness.dto.response.Response;
 import com.ren.selfbusiness.service.AuthService;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
 
 @RestController
 @AllArgsConstructor
@@ -29,8 +31,9 @@ public class AuthController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<?> reg(@RequestBody RegistrationRequest req) {
+    public ResponseEntity<?> reg(@Valid @RequestBody RegistrationRequest req) {
         Response<MessageBody> res = authService.reg(req);
+        System.out.println(res);
         log.debug("user has registered");
         return ResponseEntity.ok(res);
     }

@@ -9,4 +9,5 @@ public class ErrorCodeStorage {
     public static final String R_01 = "R_01";
     public static final String T_01 = "T_01";
     public static final String R_02 = "T_02";
+    public static final String VALID_01 = "VALID_01";
 }

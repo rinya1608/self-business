@@ -16,6 +16,8 @@ import {useAppDispatch, useAppSelector} from "../hooks/redux";
 import {reg} from "../api/auth";
 import {IRegData} from "../models/IRegData";
 import {MAIN} from "../constants/Urls";
+import {MessageState} from "../store/reducers/MesageSlice";
+import {IError} from "../models/IError";
 
 function Registration() {
 
@@ -29,7 +31,7 @@ function Registration() {
 
 
     const dispatch = useAppDispatch()
-    const {message, isLoading, error} = useAppSelector(state => state.messageReducer)
+    const {message, isLoading, error}: MessageState = useAppSelector(state => state.messageReducer)
 
 
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -47,10 +49,16 @@ function Registration() {
                 name: name.toString(),
                 password: password.toString()
             }
-            dispatch(reg(regData))
-            if (message)
-                console.log(message);
-            setDialog(true);
+            dispatch(reg(regData)).then((r) => {
+                if (r) {
+                    if (r.body)
+                        setDialog(true);
+                    else if (r.error) {
+                        apiValidation(r.error);
+                    }
+                }
+            })
+
         } else {
             if (!email) setEmailError({helperText: 'Поле не должно быть пустым', error: true})
             if (!name) setNameError({helperText: 'Поле не должно быть пустым', error: true})
@@ -59,6 +67,17 @@ function Registration() {
             else if (password != confirmPassword) setConfirmError({helperText: 'Пароли не совпадают', error: true})
         }
     };
+
+    const apiValidation = (error: IError) => {
+        let validErrors = error.validErrors;
+        if (validErrors) validErrors.forEach((e) => {
+            let eName = e.name.toLowerCase();
+            let eMessage = e.message;
+            if ('name' === eName) setNameError({helperText: eMessage, error: true});
+            if ('email' === eName) setEmailError({helperText: eMessage, error: true})
+            if ('password' === eName) setPasswordError({helperText: eMessage, error: true})
+        })
+    }
 
     const forward = () => {
         window.location.href = MAIN;

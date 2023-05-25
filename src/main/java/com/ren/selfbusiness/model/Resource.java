@@ -1,9 +1,11 @@
 package com.ren.selfbusiness.model;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -27,7 +29,6 @@ public class Resource {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "creator_id")
-    @NotNull
     private User creator;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)

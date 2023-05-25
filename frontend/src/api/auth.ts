@@ -12,7 +12,7 @@ import {TOKEN} from "../constants/StorageConstants";
 export const auth = (req: IAuthData) => async (dispatch: AppDispatch) => {
     try {
         dispatch(currentUserSlice.actions.userFetching())
-        const res = await fetch('/api/auth/signin', {
+        return await fetch('/api/auth/signin', {
             method: 'post',
             headers: {
                 'Content-Type': 'application/json'
@@ -42,7 +42,7 @@ export const auth = (req: IAuthData) => async (dispatch: AppDispatch) => {
 export const reg = (req: IRegData) => async (dispatch: AppDispatch) => {
     try {
         dispatch(messageSlice.actions.messageFetching)
-        const res = await fetch('/api/auth/signup', {
+        return await fetch('/api/auth/signup', {
             method: 'post',
             headers: {
                 'Content-Type': 'application/json'

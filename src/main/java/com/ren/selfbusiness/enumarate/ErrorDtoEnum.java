@@ -14,6 +14,7 @@ public enum ErrorDtoEnum {
     RT_01_DTO(new ErrorDto(ErrorCodeStorage.RT_01, "Такой тип не найден", 200)),
     R_01_DTO(new ErrorDto(ErrorCodeStorage.R_01, "Такой ресурс не найден", 200)),
     R_02_DTO(new ErrorDto(ErrorCodeStorage.R_01, "Не хватает продуктов", 200)),
+    VALID_01_DTO(new ErrorDto(ErrorCodeStorage.VALID_01, "Ошибка валидации", 200)),
     T_01_DTO(new ErrorDto(ErrorCodeStorage.T_01, "Такой шаблон не найден", 200));
 
     private final ErrorDto errorDto;

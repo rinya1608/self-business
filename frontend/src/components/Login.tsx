@@ -4,14 +4,17 @@ import {useAppDispatch, useAppSelector} from "../hooks/redux";
 import {IAuthData} from "../models/IAuthData";
 import {auth, getCurrentUser} from "../api/auth";
 import {MAIN} from "../constants/Urls";
+import {CustomSnackBar, SnackBarParams} from "./CustomSnackBar";
 
 function Login() {
 
-    const [emailError, setEmailError] = useState({helperText:'', error:false});
-    const [passwordError, setPasswordError] = useState({helperText:'', error:false});
+    const [emailError, setEmailError] = useState({helperText: '', error: false});
+    const [passwordError, setPasswordError] = useState({helperText: '', error: false});
 
     const dispatch = useAppDispatch()
     const {user, isLoading, error} = useAppSelector(state => state.currentUserReducer)
+
+    const [sbParams, setSbParams] = useState<SnackBarParams>({open: false, severity: 'error', message: 'me'});
 
     useEffect(() => {
         dispatch(getCurrentUser()).then(() => {
@@ -25,14 +28,15 @@ function Login() {
         let email = data.get("email");
         let password = data.get("password");
         if (email && password) {
-            console.log("email" + email)
-            const authData : IAuthData = {
+            const authData: IAuthData = {
                 email: email.toString(),
                 password: password.toString()
             }
-            dispatch(auth(authData))
-        }
-        else {
+            dispatch(auth(authData)).then((r) => {
+                if (r && r.error)
+                    setSbParams({open: true, severity: 'error', message: r.error.message})
+            })
+        } else {
             if (!email) setEmailError({helperText: 'Поле не должно быть пустым', error: true})
             if (!password) setPasswordError({helperText: 'Поле не должно быть пустым', error: true})
         }
@@ -81,7 +85,7 @@ function Login() {
                                 <TextField
                                     helperText={emailError.helperText}
                                     error={emailError.error}
-                                    onChange={() => setEmailError({helperText:'', error:false})}
+                                    onChange={() => setEmailError({helperText: '', error: false})}
                                     margin="normal"
                                     required
                                     fullWidth
@@ -94,7 +98,7 @@ function Login() {
                                 <TextField
                                     helperText={passwordError.helperText}
                                     error={passwordError.error}
-                                    onChange={() => setPasswordError({helperText:'', error:false})}
+                                    onChange={() => setPasswordError({helperText: '', error: false})}
                                     margin="normal"
                                     required
                                     fullWidth
@@ -126,6 +130,13 @@ function Login() {
                     </Grid>
                 </Grid>
             </Box>
+            {
+                error ? <CustomSnackBar params={sbParams} handleClose={() => setSbParams({
+                    open: false,
+                    severity: 'error',
+                    message: ''
+                })}/> : null
+            }
         </Container>
     );
 };
