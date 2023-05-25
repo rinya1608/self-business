@@ -24,6 +24,7 @@ import {ITemplate} from "../models/ITemplate";
 import {addSale} from "../api/sale";
 import {ITemplateData} from "../models/ITemplateData";
 import {ISaleData} from "../models/ISaleData";
+import {RUB} from "../constants/CurrencyConstants";
 
 const Template = () => {
 
@@ -104,7 +105,9 @@ const Template = () => {
                         </Avatar>
                     </ListItemAvatar>
                     <ListItemText
-                        primary={el.name}/>
+                        primary={el.name}
+                        secondary={RUB(el.cost).format()}
+                    />
                 </ListItemButton>
             </ListItem>
         )

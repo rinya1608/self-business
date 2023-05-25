@@ -9,7 +9,7 @@ import {
     ListItemAvatar,
     ListItemButton,
     ListItemText,
-    Pagination
+    Pagination, Typography
 } from "@mui/material";
 import {useAppDispatch, useAppSelector} from "../hooks/redux";
 import {ResourceTypeState} from "../store/reducers/ResourceTypeSlice";
@@ -104,7 +104,9 @@ const ResourceType = () => {
                         </Avatar>
                     </ListItemAvatar>
                     <ListItemText
-                        primary={el.name}/>
+                        primary={el.name}
+                        secondary={el.count + ' ' + el.unit}
+                    />
                 </ListItemButton>
             </ListItem>
         )

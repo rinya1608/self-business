@@ -21,16 +21,13 @@ export const auth = (req: IAuthData) => async (dispatch: AppDispatch) => {
         }).then(response => {
             return response.json() as Promise<Response<ICurrentUser>>
         }).then((r => {
-            console.log(r)
             if (r.error != null) {
                 dispatch(currentUserSlice.actions.userFetchingError(r.error))
 
             } else if (r.body != null) {
                 dispatch(currentUserSlice.actions.userFetchingSuccess(r.body))
                 localStorage.setItem(TOKEN, r.body.jwtToken)
-                console.log(r.body)
             }
-            console.log(r)
             return r;
         })).catch(e => {
             console.log(e)

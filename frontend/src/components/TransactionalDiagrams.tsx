@@ -243,7 +243,7 @@ const TransactionalDiagrams = () => {
                                 }}>
                                     <Typography variant='h6' sx={{
                                         fontSize: '30px',
-                                        color: currencyIncome.value < 0 ? 'red' : 'green'
+                                        color: 'green'
                                     }}>
                                         {currencyIncome.format()}
                                     </Typography>
@@ -263,9 +263,9 @@ const TransactionalDiagrams = () => {
                                 }}>
                                     <Typography variant='h6' sx={{
                                         fontSize: '30px',
-                                        color: currencyExpenses.value < 0 ? 'red' : 'green'
+                                        color: 'red'
                                     }}>
-                                        {currencyExpenses.format()}
+                                        {'-' + currencyExpenses.format()}
                                     </Typography>
                                 </Box>
                             </Box>

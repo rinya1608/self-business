@@ -28,7 +28,7 @@ public class TransactionController {
                                              @RequestParam(defaultValue = "0") int page,
                                              @RequestBody TransactionFilterRequest filterReq) {
         Page<TransactionBody> transactionBodies = transactionService.getAll(filterReq,
-                PageRequest.of(page, size, Sort.by("date")),
+                PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "date")),
                 userService.parseAndFindByJwt(token));
         return ResponseEntity.ok(Response.<Page<TransactionBody>>builder().body(transactionBodies).build());
     }

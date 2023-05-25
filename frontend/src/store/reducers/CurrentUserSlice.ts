@@ -3,7 +3,7 @@ import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {IDefaultState} from "../../models/IDefaultState";
 import {IError} from "../../models/IError";
 
-interface CurrentUserState extends IDefaultState {
+export interface CurrentUserState extends IDefaultState {
     user: ICurrentUser | null
 }
 

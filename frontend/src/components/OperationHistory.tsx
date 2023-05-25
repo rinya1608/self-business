@@ -1,7 +1,8 @@
 import React, {useEffect} from 'react';
 import {
     Avatar,
-    Box, Button,
+    Box,
+    Button,
     Checkbox,
     Container,
     FormControlLabel,
@@ -17,22 +18,21 @@ import {useAppDispatch, useAppSelector} from "../hooks/redux";
 import {transactionSlice, TransactionSlice} from "../store/reducers/TransactionSlice";
 import {MessageState} from "../store/reducers/MesageSlice";
 import {getPageWithTransaction} from "../api/transaction";
-import TrendingUpIcon from '@mui/icons-material/TrendingUp';
-import TrendingDownIcon from '@mui/icons-material/TrendingDown';
 import {TransactionFilterData} from "../models/TransactionFilterData";
 import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
 import {DatePicker, LocalizationProvider} from '@mui/x-date-pickers';
 import {Dayjs} from "dayjs";
-import currency from "currency.js";
-import styled, {createGlobalStyle} from "styled-components";
-
+import {createGlobalStyle} from "styled-components";
+import {RUB} from "../constants/CurrencyConstants";
+import SavingsIcon from '@mui/icons-material/Savings';
+import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 
 const OperationHistory = () => {
 
     const DatePickerStyle = createGlobalStyle`
-        .datepicker input{
-          font-size: 14px;
-        }
+      .datepicker input {
+        font-size: 14px;
+      }
     `
 
     const [page, setPage] = React.useState(1);
@@ -56,7 +56,7 @@ const OperationHistory = () => {
         let filter: TransactionFilterData = {
             getIncome: getIncome,
             getSales: getSales,
-            dateFrom: dateFrom ?  dateFrom.format('YYYY-MM-DD') : null,
+            dateFrom: dateFrom ? dateFrom.format('YYYY-MM-DD') : null,
             dateTo: dateTo ? dateTo.format('YYYY-MM-DD') : null
         }
         dispatch(getPageWithTransaction(page > 0 ? page : 1, 10, filter));
@@ -106,13 +106,18 @@ const OperationHistory = () => {
                 >
                     <ListItemAvatar>
                         <Avatar>
-                            <TrendingDownIcon/>
+                            <AddShoppingCartIcon/>
                         </Avatar>
                     </ListItemAvatar>
                     <ListItemText
-                        primary={el.resource.type.name}/>
-                    <ListItemText
-                        primary={el.sum}/>
+                        primary={el.resource.type.name}
+                        secondary={new Date(el.date).toLocaleString()}
+                    />
+                    <ListItemText sx={{
+                        textAlign: 'right',
+                        color: 'red'
+                    }}
+                                  primary={'-' + RUB(el.sum).format()}/>
                 </ListItem>
                 :
                 <ListItem
@@ -124,13 +129,18 @@ const OperationHistory = () => {
                 >
                     <ListItemAvatar>
                         <Avatar>
-                            <TrendingUpIcon/>
+                            <SavingsIcon/>
                         </Avatar>
                     </ListItemAvatar>
                     <ListItemText
-                        primary={el.template?.name}/>
-                    <ListItemText
-                        primary={el.sum}/>
+                        primary={el.template?.name}
+                        secondary={new Date(el.date).toLocaleString()}
+                    />
+                    <ListItemText sx={{
+                        textAlign: 'right',
+                        color: 'green'
+                    }}
+                                  primary={RUB(el.sum).format()}/>
                 </ListItem>
         )
     });
@@ -196,7 +206,7 @@ const OperationHistory = () => {
                                         format="DD-MM-YYYY"
                                         views={["day", "month", "year"]}
                                         onChange={date => setDateFrom(date)}
-                                        slotProps={{ textField: { size: 'small', sx: {width: '43%'} }}}
+                                        slotProps={{textField: {size: 'small', sx: {width: '43%'}}}}
                             />
                         </LocalizationProvider>
                         <Typography sx={{ml: 2}}> - </Typography>
@@ -207,7 +217,7 @@ const OperationHistory = () => {
                                         format="DD-MM-YYYY"
                                         views={["day", "month", "year"]}
                                         onChange={date => setDateTo(date)}
-                                        slotProps={{ textField: { size: 'small', sx: {width: '43%', ml: 2} }}}
+                                        slotProps={{textField: {size: 'small', sx: {width: '43%', ml: 2}}}}
                             />
                             <DatePickerStyle/>
                         </LocalizationProvider>
@@ -232,11 +242,11 @@ const OperationHistory = () => {
                     >Сбросить</Button>
                     <Button variant="contained"
                             sx={{
-                        width: '80%',
+                                width: '80%',
                                 m: 'auto',
                                 mt: 2
-                    }}
-                      onClick={()=>setGetPageTrigger(!getPageTrigger)}
+                            }}
+                            onClick={() => setGetPageTrigger(!getPageTrigger)}
                     >
                         Применить
                     </Button>

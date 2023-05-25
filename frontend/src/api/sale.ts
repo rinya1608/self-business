@@ -1,13 +1,8 @@
 import {AppDispatch} from "../store/store";
 import {Response} from "../models/Response";
 import {getJwtTokenHeader} from "../utils/jwtUtils";
-import {IPage} from "../models/IPage";
 import {messageSlice} from "../store/reducers/MesageSlice";
 import {IMessage} from "../models/IMessage";
-import {statusResolve} from "../utils/errorUtils";
-import {resourceSlice} from "../store/reducers/ResourceSlice";
-import {IResource} from "../models/IResource";
-import {IResourceData} from "../models/IResourceData";
 import {ISaleData} from "../models/ISaleData";
 
 export const addSale = (data: ISaleData) => async (dispatch: AppDispatch) => {

@@ -18,7 +18,7 @@ public class ResourceTypeMapper implements EntityMapper<ResourceTypeBody, Resour
     public ResourceTypeBody toDto(ResourceType entity) {
         User creator = entity.getCreator();
         if (creator == null) throw new BusinessException(ErrorDtoEnum.UNKNOWN_01_DTO.getErrorDto());
-        return new ResourceTypeBody(entity.getId(), entity.getName(), entity.getUnit(), creator.getUsername());
+        return new ResourceTypeBody(entity.getId(), entity.getName(), entity.getUnit(), creator.getUsername(), String.valueOf(entity.getCount()));
     }
 
     @Override

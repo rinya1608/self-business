@@ -21,6 +21,9 @@ import {MAIN} from "../constants/Urls";
 import ResourceTypeDialog from "./ResourceTypeDialog";
 import ResourceDialog from "./ResourceDialog";
 import TemplateDialog from "./TemplateDialog";
+import {ICurrentUser} from "../models/ICurrentUser";
+import {CurrentUserState} from "../store/reducers/CurrentUserSlice";
+import LogoutIcon from '@mui/icons-material/Logout';
 
 
 interface DrawerListEl {
@@ -36,7 +39,7 @@ const Header = () => {
     const [createMenu, setCreateMenu] = React.useState<null | HTMLElement>(null);
 
     const dispatch = useAppDispatch()
-    const {user, isLoading, error} = useAppSelector(state => state.currentUserReducer)
+    const {user, isLoading, error}: CurrentUserState = useAppSelector(state => state.currentUserReducer)
 
     useEffect(() => {
         dispatch(getCurrentUser())
@@ -110,7 +113,14 @@ const Header = () => {
                     </Box>
                     <Box>
                         {
-                            user ? <Button color="inherit" onClick={logoutEvent}>Выйти</Button>
+                            user ?
+                                <Box sx={{
+                                    display: 'flex',
+                                    alignItems: 'center'
+                                }}>
+                                    <Typography>{user.user.name}</Typography>
+                                    <IconButton color="inherit" onClick={logoutEvent}><LogoutIcon/></IconButton>
+                            </Box>
                                 : <Button color="inherit" href={"/login"}>Войти</Button>
                         }
                     </Box>
