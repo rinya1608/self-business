@@ -1,15 +1,31 @@
 import React, {useEffect, useState} from 'react';
-import {Box, Button, Container, CssBaseline, Grid, Link, Paper, TextField, Typography} from "@mui/material";
+import {
+    Box,
+    Button,
+    Container,
+    CssBaseline,
+    Grid, IconButton,
+    InputAdornment,
+    Link,
+    Paper,
+    TextField,
+    Typography
+} from "@mui/material";
 import {useAppDispatch, useAppSelector} from "../hooks/redux";
 import {IAuthData} from "../models/IAuthData";
 import {auth, getCurrentUser} from "../api/auth";
 import {MAIN} from "../constants/Urls";
 import {CustomSnackBar, SnackBarParams} from "./CustomSnackBar";
+import {Visibility, VisibilityOff} from "@mui/icons-material";
 
 function Login() {
 
     const [emailError, setEmailError] = useState({helperText: '', error: false});
     const [passwordError, setPasswordError] = useState({helperText: '', error: false});
+
+    const [showPassword, setShowPassword] = useState(false);
+    const handleClickShowPassword = () => setShowPassword(!showPassword);
+    const handleMouseDownPassword = () => setShowPassword(!showPassword);
 
     const dispatch = useAppDispatch()
     const {user, isLoading, error} = useAppSelector(state => state.currentUserReducer)
@@ -79,7 +95,7 @@ function Login() {
                                 component="form"
                                 method=""
                                 noValidate
-                                sx={{mt: 1}}
+                                sx={{mt: 1, width: '70%'}}
                                 onSubmit={handleSubmit}
                             >
                                 <TextField
@@ -104,9 +120,23 @@ function Login() {
                                     fullWidth
                                     name="password"
                                     label="Пароль"
-                                    type="password"
+                                    type={showPassword ? "text" : "password"}
                                     id="password"
                                     autoComplete="current-password"
+                                    InputProps={{ // <-- This is where the toggle button is added.
+                                        endAdornment: (
+                                            <InputAdornment position="end">
+                                                <IconButton
+                                                    aria-label="toggle password visibility"
+                                                    onClick={handleClickShowPassword}
+                                                    onMouseDown={handleMouseDownPassword}
+                                                    color={showPassword ? "primary" : "default"}
+                                                >
+                                                    {showPassword ? <Visibility /> : <VisibilityOff />}
+                                                </IconButton>
+                                            </InputAdornment>
+                                        )
+                                    }}
                                 />
                                 <Button
                                     type="submit"

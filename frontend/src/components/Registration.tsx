@@ -6,7 +6,7 @@ import {
     Dialog,
     DialogActions,
     DialogContent,
-    Grid,
+    Grid, IconButton, InputAdornment,
     Paper,
     TextField,
     Typography
@@ -18,6 +18,7 @@ import {IRegData} from "../models/IRegData";
 import {MAIN} from "../constants/Urls";
 import {MessageState} from "../store/reducers/MesageSlice";
 import {IError} from "../models/IError";
+import {Visibility, VisibilityOff} from "@mui/icons-material";
 
 function Registration() {
 
@@ -26,6 +27,14 @@ function Registration() {
     const [passwordError, setPasswordError] = useState({helperText: '', error: false});
     const [confirmError, setConfirmError] = useState({helperText: '', error: false});
 
+
+    const [showPassword, setShowPassword] = useState(false);
+    const handleClickShowPassword = () => setShowPassword(!showPassword);
+    const handleMouseDownPassword = () => setShowPassword(!showPassword);
+
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+    const handleClickShowConfirmPassword = () => setShowConfirmPassword(!showConfirmPassword);
+    const handleMouseDownConfirmPassword = () => setShowConfirmPassword(!showConfirmPassword);
 
     const [dialog, setDialog] = useState(false);
 
@@ -157,9 +166,23 @@ function Registration() {
                                     fullWidth
                                     name="password"
                                     label="Пароль"
-                                    type="password"
+                                    type={showPassword ? "text" : "password"}
                                     id="password"
                                     autoComplete="current-password"
+                                    InputProps={{ // <-- This is where the toggle button is added.
+                                        endAdornment: (
+                                            <InputAdornment position="end">
+                                                <IconButton
+                                                    aria-label="toggle password visibility"
+                                                    onClick={handleClickShowPassword}
+                                                    onMouseDown={handleMouseDownPassword}
+                                                    color={showPassword ? "primary" : "default"}
+                                                >
+                                                    {showPassword ? <Visibility /> : <VisibilityOff />}
+                                                </IconButton>
+                                            </InputAdornment>
+                                        )
+                                    }}
                                 />
                                 <TextField
                                     helperText={confirmError.helperText}
@@ -170,8 +193,22 @@ function Registration() {
                                     fullWidth
                                     name="confirmPassword"
                                     label="Пароль еще раз"
-                                    type="password"
+                                    type={showConfirmPassword ? "text" : "password"}
                                     id="confirmPassword"
+                                    InputProps={{ // <-- This is where the toggle button is added.
+                                        endAdornment: (
+                                            <InputAdornment position="end">
+                                                <IconButton
+                                                    aria-label="toggle password visibility"
+                                                    onClick={handleClickShowConfirmPassword}
+                                                    onMouseDown={handleMouseDownConfirmPassword}
+                                                    color={showConfirmPassword ? "primary" : "default"}
+                                                >
+                                                    {showConfirmPassword ? <Visibility /> : <VisibilityOff />}
+                                                </IconButton>
+                                            </InputAdornment>
+                                        )
+                                    }}
                                 />
                                 <Button
                                     type="submit"
