@@ -23,6 +23,7 @@ import {addSale} from "../api/sale";
 import {ISaleData} from "../models/ISaleData";
 import {RUB} from "../constants/CurrencyConstants";
 import {CustomSnackBar, SnackBarParams} from "./CustomSnackBar";
+import TemplateDialog from "./TemplateDialog";
 
 const Template = () => {
 
@@ -44,6 +45,7 @@ const Template = () => {
 
     useEffect(() => {
         if (page != 0) dispatch(getPageWithTemplates(page, 10));
+        console.log(message)
     }, [page, message])
     const handleChangePage = (event: React.ChangeEvent<unknown>, value: number) => {
         setPage(value);
@@ -158,6 +160,7 @@ const Template = () => {
             }>
                 <Pagination color="primary" count={pageCount} page={page} onChange={handleChangePage}/>
             </Box>
+            <TemplateDialog open={templateDialog} handleOpen={templateHandleOpen} handleClose={templateHandleClose} template={template}/>
             <CustomSnackBar params={sbParams} handleClose={() => setSbParams({
                 open: false,
                 severity: 'error',

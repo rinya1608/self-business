@@ -26,6 +26,13 @@ public class TemplateController {
         return ResponseEntity.ok(Response.<MessageBody>builder().body(new MessageBody("Тип добавлен")).build());
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateTemplate(@PathVariable Long id,
+                                            @RequestBody TemplateRequest req) {
+        templateService.updateTemplate(id, req);
+        return ResponseEntity.ok(Response.<MessageBody>builder().body(new MessageBody("Тип добавлен")).build());
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteTemplate(@PathVariable Long id) {
         templateService.deleteTemplate(id);

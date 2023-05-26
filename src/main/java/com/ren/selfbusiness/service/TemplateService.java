@@ -13,6 +13,8 @@ import org.springframework.data.domain.Pageable;
 public interface TemplateService {
     void addTemplate(TemplateRequest req, User user);
 
+    void updateTemplate(Long id, TemplateRequest req);
+
     void deleteTemplate(Long id);
     Page<TemplateBody> getAll(Pageable pageable, User user);
 

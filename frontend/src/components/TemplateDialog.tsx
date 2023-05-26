@@ -22,7 +22,7 @@ import resourceType from "./ResourceType";
 import {ITemplate} from "../models/ITemplate";
 import {ITemplateData} from "../models/ITemplateData";
 import {IIngredientData} from "../models/IIngredientData";
-import {addTemplate} from "../api/template";
+import {addTemplate, updateTemplate} from "../api/template";
 import {ResourceTypeState} from "../store/reducers/ResourceTypeSlice";
 import {MessageState} from "../store/reducers/MesageSlice";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -54,7 +54,19 @@ const TemplateDialog = ({open, handleOpen, handleClose, template = null}: Props)
     const [ingredients, setIngredients] = useState<IngredientField[]>([]);
 
     useEffect(() => {
-
+        if (template != null) {
+            setName({value: template.name, error: false, helperText: ''})
+            setCost({value: template.cost, error: false, helperText: ''})
+            template.ingredients.forEach(i => {
+                setIngredients([
+                    ...ingredients,
+                    {
+                        count: {value: i.count, error: false, helperText: ''},
+                        resourceType: {value: i.resourceType, error: false, helperText: ''}
+                    }
+                ])
+            })
+        }
     }, [template])
 
     useEffect(() => {
@@ -79,7 +91,10 @@ const TemplateDialog = ({open, handleOpen, handleClose, template = null}: Props)
                         throw new Error("null");
                     })
                 };
-                dispatch(addTemplate(data));
+                if (template) {
+                    dispatch(updateTemplate(template.id, data));
+                }
+                else dispatch(addTemplate(data));
                 close();
                 window.location.href = TEMPLATE
             } catch (e) {
@@ -94,7 +109,6 @@ const TemplateDialog = ({open, handleOpen, handleClose, template = null}: Props)
     const close = () => {
         setName({value: '', error: false, helperText: ''});
         setCost({value: '', error: false, helperText: ''});
-        setIngredients([]);
         handleClose();
     }
 
@@ -252,7 +266,7 @@ const TemplateDialog = ({open, handleOpen, handleClose, template = null}: Props)
                     Отменить
                 </Button>
                 <Button onClick={add}>
-                    Создать
+                    {template ? "Сохранить" : "Создать"}
                 </Button>
             </DialogActions>
         </Dialog>
