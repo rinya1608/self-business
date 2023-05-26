@@ -24,8 +24,8 @@ import {DatePicker, LocalizationProvider} from '@mui/x-date-pickers';
 import {Dayjs} from "dayjs";
 import {createGlobalStyle} from "styled-components";
 import {RUB} from "../constants/CurrencyConstants";
-import SavingsIcon from '@mui/icons-material/Savings';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
+import CheckIcon from '@mui/icons-material/Check';
 
 const OperationHistory = () => {
 
@@ -129,7 +129,7 @@ const OperationHistory = () => {
                 >
                     <ListItemAvatar>
                         <Avatar>
-                            <SavingsIcon/>
+                            <CheckIcon/>
                         </Avatar>
                     </ListItemAvatar>
                     <ListItemText
@@ -267,7 +267,7 @@ const OperationHistory = () => {
                     mt: 2,
                     pl: 2
                 }}>
-                    <Typography variant='h6'>Итог: </Typography>
+                    <Typography variant='h6'>Операции</Typography>
                 </Box>
                 <Box sx={{
                     flexGrow: 3,

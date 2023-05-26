@@ -18,7 +18,7 @@ public class RegistrationRequest {
     @NotBlank
     private String name;
     @NotBlank
-    @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$",
-            message = "Пароль должен содержать не менее 8 символов, хотя бы один символ и одну цифру")
+    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[\\W]).{6,}",
+            message = "Пароль должен содержать не менее 6 символов, букву в нижнем и верхнем регистре, цифру и символ")
     private String password;
 }

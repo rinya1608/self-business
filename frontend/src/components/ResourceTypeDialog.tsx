@@ -5,6 +5,7 @@ import {addResourceType, updateResourceType} from "../api/resourceType";
 import {IResourceTypeData} from "../models/IResourceTypeData";
 import {IResourceType} from "../models/IResourceType";
 import {FieldType} from "../types/FieldType";
+import {MAIN, TYPE} from "../constants/Urls";
 
 
 interface Props {
@@ -37,6 +38,7 @@ const ResourceTypeDialog = ({open, handleOpen, handleClose, resourceType = null}
             };
             dispatch(addResourceType(data));
             close();
+            window.location.href = TYPE
         }
     };
 
@@ -65,7 +67,7 @@ const ResourceTypeDialog = ({open, handleOpen, handleClose, resourceType = null}
 
     return (
         <Dialog open={open} onClose={handleOpen} aria-labelledby="form-dialog-title">
-            <DialogTitle id="form-dialog-title">{resourceType != null ? 'Изменить' : 'Добавить'} тип ресурса</DialogTitle>
+            <DialogTitle id="form-dialog-title">{resourceType != null ? 'Изменить' : 'Добавить'} расходный материал</DialogTitle>
             <DialogContent>
                 <TextField
                     autoFocus
@@ -93,7 +95,7 @@ const ResourceTypeDialog = ({open, handleOpen, handleClose, resourceType = null}
             </DialogContent>
             <DialogActions>
                 <Button onClick={close}>
-                    Cancel
+                    Отменить
                 </Button>
                 <Button onClick={resourceType != null ? update : add}>
                     {resourceType != null ? 'Сохранить' : 'Создать'}

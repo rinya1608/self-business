@@ -37,7 +37,7 @@ export const getPageWithResourceTypes = (page: number, size: number) => async (d
 
 export const addResourceType = (data: IResourceTypeData) => async (dispatch: AppDispatch) => {
     dispatch(messageSlice.actions.messageFetching())
-    let res = await fetch('/api/type', {
+    return await fetch('/api/type', {
         method: 'post',
         headers: getJwtTokenHeader(),
         body: JSON.stringify(data)

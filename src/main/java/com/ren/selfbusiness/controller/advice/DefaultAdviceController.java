@@ -23,7 +23,7 @@ public class DefaultAdviceController {
     @ExceptionHandler({BusinessException.class})
     public ResponseEntity<?> exceptionHandler(BusinessException e) {
         ErrorDto error = e.getErrorDto();
-        log.warn("error code: {} error message: {}", error.getCode(), error.getMessage());
+        log.warn("error code: {} error message: {}", error.getCode(), error.getMessage(), e);
         return ResponseEntity.status(error.getHttpStatus())
                 .body(Response.builder().error(new ErrorBody(error.getCode(), error.getMessage())).build());
     }

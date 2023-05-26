@@ -19,9 +19,7 @@ import {useAppDispatch, useAppSelector} from "../hooks/redux";
 import {getCurrentUser, logout} from "../api/auth";
 import {MAIN} from "../constants/Urls";
 import ResourceTypeDialog from "./ResourceTypeDialog";
-import ResourceDialog from "./ResourceDialog";
 import TemplateDialog from "./TemplateDialog";
-import {ICurrentUser} from "../models/ICurrentUser";
 import {CurrentUserState} from "../store/reducers/CurrentUserSlice";
 import LogoutIcon from '@mui/icons-material/Logout';
 
@@ -37,6 +35,7 @@ const Header = () => {
     const [resourceTypeDialog, setResourceTypeDialog] = useState(false);
     const [templateDialog, setTemplateDialog] = useState(false);
     const [createMenu, setCreateMenu] = React.useState<null | HTMLElement>(null);
+
 
     const dispatch = useAppDispatch()
     const {user, isLoading, error}: CurrentUserState = useAppSelector(state => state.currentUserReducer)
@@ -98,7 +97,7 @@ const Header = () => {
                         <Button size="medium" variant="contained" onClick={createMenuHandleClick} sx={{
                             ml: 5,
                         }}>
-                            Создать
+                            Добавить
                         </Button>
                         <Menu
                             id="simple-menu"
@@ -107,8 +106,8 @@ const Header = () => {
                             open={Boolean(createMenu)}
                             onClose={() => setCreateMenu(null)}
                         >
-                            <MenuItem onClick={resourceTypeHandleOpen}>Тип ресурсов</MenuItem>
-                            <MenuItem onClick={templateHandleOpen}>Шаблон</MenuItem>
+                            <MenuItem onClick={resourceTypeHandleOpen}>Расходный материал</MenuItem>
+                            <MenuItem onClick={templateHandleOpen}>Продукт/Услуга</MenuItem>
                         </Menu>
                     </Box>
                     <Box>
@@ -120,7 +119,7 @@ const Header = () => {
                                 }}>
                                     <Typography>{user.user.name}</Typography>
                                     <IconButton color="inherit" onClick={logoutEvent}><LogoutIcon/></IconButton>
-                            </Box>
+                                </Box>
                                 : <Button color="inherit" href={"/login"}>Войти</Button>
                         }
                     </Box>
@@ -138,8 +137,8 @@ const Header = () => {
                         onClick={() => setMenu(true)}
                     >
                         <List>
-                            {[{text: "Типы ресурсов", href: "/resource-types"},
-                                {text: "Шаблоны", href: "/template"},
+                            {[{text: "Склад", href: "/resource-types"},
+                                {text: "Продукция/Услуги", href: "/template"},
                                 {text: "История операций", href: "/history"},
                                 {text: "Статистика", href: "/statistic"}].map((el: DrawerListEl, index) => (
                                 <ListItem key={index} disablePadding>
@@ -152,7 +151,8 @@ const Header = () => {
                     </Box>
                 </Drawer>
             </React.Fragment>
-            <ResourceTypeDialog open={resourceTypeDialog} handleOpen={resourceTypeHandleOpen} handleClose={resourceTypeHandleClose}/>
+            <ResourceTypeDialog open={resourceTypeDialog} handleOpen={resourceTypeHandleOpen}
+                                handleClose={resourceTypeHandleClose}/>
             <TemplateDialog open={templateDialog} handleOpen={templateHandleOpen} handleClose={templateHandleClose}/>
         </Box>
     );

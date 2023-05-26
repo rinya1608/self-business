@@ -88,7 +88,7 @@ const TransactionalDiagrams = () => {
         animationEnabled: true,
         theme: "light2",
         title:{
-            text: "Наиболее популярные шаблоны"
+            text: "Наиболее популярные продукты/услуги"
         },
         axisX: {
             title: "Шаблон",

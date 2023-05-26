@@ -15,16 +15,14 @@ import {
 import CakeIcon from '@mui/icons-material/Cake';
 import {useAppDispatch, useAppSelector} from "../hooks/redux";
 import {TemplateSlice} from "../store/reducers/TemplateSlice";
-import CategoryIcon from '@mui/icons-material/Category';
 import DeleteIcon from '@mui/icons-material/Delete';
 import {MessageState} from "../store/reducers/MesageSlice";
-import AddBoxIcon from '@mui/icons-material/AddBox';
 import {deleteTemplate, getPageWithTemplates} from "../api/template";
 import {ITemplate} from "../models/ITemplate";
 import {addSale} from "../api/sale";
-import {ITemplateData} from "../models/ITemplateData";
 import {ISaleData} from "../models/ISaleData";
 import {RUB} from "../constants/CurrencyConstants";
+import {CustomSnackBar, SnackBarParams} from "./CustomSnackBar";
 
 const Template = () => {
 
@@ -33,6 +31,8 @@ const Template = () => {
     const [templateDialog, setTemplateDialog] = useState(false);
     const [resourceDialog, setResourceDialog] = useState(false);
     const [template, setTemplate] = useState<ITemplate | null>(null);
+    const [sbParams, setSbParams] = useState<SnackBarParams>({open: false, severity: 'error', message: 'me'});
+
 
     const dispatch = useAppDispatch()
     const {templatePage, isLoading, error}: TemplateSlice = useAppSelector(state => state.templateReducer)
@@ -60,7 +60,22 @@ const Template = () => {
         var data: ISaleData = {
             templateId: template.id
         }
-        dispatch(addSale(data))
+        dispatch(addSale(data)).then((r) => {
+            if (r) {
+                if (r.body)
+                    setSbParams({
+                        open: true,
+                        severity: 'success',
+                        message: r.body.message
+                    })
+                else if (r.error)
+                    setSbParams({
+                        open: true,
+                        severity: 'error',
+                        message: r.error.message
+                    })
+            }
+        })
     }
 
     const handleDelete = (id: number) => {
@@ -87,7 +102,7 @@ const Template = () => {
                 key={el.id}
                 secondaryAction={
                     <Box>
-                        <Button onClick={() => sale(el)}>sell</Button>
+                        <Button onClick={() => sale(el)}>продать</Button>
                         <IconButton edge="end" aria-label="delete" onClick={() => handleDelete(el.id)}>
                             <DeleteIcon/>
                         </IconButton>
@@ -143,6 +158,11 @@ const Template = () => {
             }>
                 <Pagination color="primary" count={pageCount} page={page} onChange={handleChangePage}/>
             </Box>
+            <CustomSnackBar params={sbParams} handleClose={() => setSbParams({
+                open: false,
+                severity: 'error',
+                message: ''
+            })}/>
         </Container>
     );
 };

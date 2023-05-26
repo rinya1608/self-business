@@ -188,7 +188,7 @@ function Registration() {
             </Box>
             <Dialog onClose={() => setDialog(false)} aria-labelledby="customized-dialog-title" open={dialog}>
                 <DialogContent>
-                    Аккаунт успешно зарегестрирован!
+                    Аккаунт успешно зарегистрирован!
                 </DialogContent>
                 <DialogActions>
                     <Button autoFocus onClick={forward} color="primary">

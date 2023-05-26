@@ -87,7 +87,7 @@ const ResourceDialog = ({open, handleOpen, handleClose, resourceType}: Props) =>
             }
             else {
                 if (unitPrice.value && parseFloat(unitPrice.value) != 0)
-                    setSum({value: String(parseFloat(unitPrice.value) / num), error: false, helperText: ''});
+                    setSum({value: String(parseFloat(unitPrice.value) * num), error: false, helperText: ''});
                 else setUnitPrice({value: String(parseFloat(sum.value) / num), error: false, helperText: ''});
             }
         } else setCount({value: count.value, error: true, helperText: 'Значение должно быть числовым'});
@@ -117,7 +117,7 @@ const ResourceDialog = ({open, handleOpen, handleClose, resourceType}: Props) =>
 
     return (
         <Dialog open={open} onClose={handleOpen} aria-labelledby="form-dialog-title">
-            <DialogTitle id="form-dialog-title">Добавить ресурс для {resourceType?.name}</DialogTitle>
+            <DialogTitle id="form-dialog-title">Добавить {resourceType?.name}</DialogTitle>
             <DialogContent>
                 <TextField
                     autoFocus

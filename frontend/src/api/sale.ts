@@ -7,7 +7,7 @@ import {ISaleData} from "../models/ISaleData";
 
 export const addSale = (data: ISaleData) => async (dispatch: AppDispatch) => {
     dispatch(messageSlice.actions.messageFetching())
-    let res = await fetch('/api/sale', {
+    return await fetch('/api/sale', {
         method: 'post',
         headers: getJwtTokenHeader(),
         body: JSON.stringify(data)

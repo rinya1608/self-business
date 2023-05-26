@@ -27,6 +27,7 @@ import {ResourceTypeState} from "../store/reducers/ResourceTypeSlice";
 import {MessageState} from "../store/reducers/MesageSlice";
 import DeleteIcon from "@mui/icons-material/Delete";
 import {isNumber} from "../utils/TypeUtils";
+import {TEMPLATE} from "../constants/Urls";
 
 
 interface Props {
@@ -78,9 +79,9 @@ const TemplateDialog = ({open, handleOpen, handleClose, template = null}: Props)
                         throw new Error("null");
                     })
                 };
-                console.log(data)
                 dispatch(addTemplate(data));
                 close();
+                window.location.href = TEMPLATE
             } catch (e) {
                 console.log(e)
             }
@@ -92,6 +93,7 @@ const TemplateDialog = ({open, handleOpen, handleClose, template = null}: Props)
 
     const close = () => {
         setName({value: '', error: false, helperText: ''});
+        setCost({value: '', error: false, helperText: ''});
         setIngredients([]);
         handleClose();
     }
@@ -164,7 +166,7 @@ const TemplateDialog = ({open, handleOpen, handleClose, template = null}: Props)
                 <FormControl
                     fullWidth
                     margin="dense">
-                    <InputLabel id="demo-simple-select-helper-label">Type</InputLabel>
+                    <InputLabel id="demo-simple-select-helper-label">Тип</InputLabel>
                     <Select
                         labelId="demo-simple-select-helper-label"
                         id="demo-simple-select-helper"
@@ -199,7 +201,7 @@ const TemplateDialog = ({open, handleOpen, handleClose, template = null}: Props)
 
     return (
         <Dialog open={open} onClose={handleOpen} aria-labelledby="form-dialog-title">
-            <DialogTitle id="form-dialog-title">Add Template</DialogTitle>
+            <DialogTitle id="form-dialog-title">Добавить продукт/услугу</DialogTitle>
             <DialogContent>
                 <TextField
                     autoFocus
