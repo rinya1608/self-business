@@ -1,9 +1,9 @@
 package com.ren.selfbusiness.controller;
 
-import com.ren.selfbusiness.dto.request.ResourceRequest;
 import com.ren.selfbusiness.dto.request.TransactionFilterRequest;
-import com.ren.selfbusiness.dto.response.*;
-import com.ren.selfbusiness.service.ResourceService;
+import com.ren.selfbusiness.dto.response.Response;
+import com.ren.selfbusiness.dto.response.TransactionBody;
+import com.ren.selfbusiness.dto.response.TransactionalStatisticBody;
 import com.ren.selfbusiness.service.TransactionService;
 import com.ren.selfbusiness.service.UserService;
 import lombok.AllArgsConstructor;
@@ -11,10 +11,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-@Controller
+@RestController
 @AllArgsConstructor
 @RequestMapping("/api/transaction")
 public class TransactionController {
@@ -35,7 +34,7 @@ public class TransactionController {
 
     @PostMapping("/statistic")
     public ResponseEntity<?> getStatistic(@RequestHeader(name = "Authorization") String token,
-                                             @RequestBody TransactionFilterRequest filterReq) {
+                                          @RequestBody TransactionFilterRequest filterReq) {
         TransactionalStatisticBody statistic = transactionService.getStatistic(filterReq, userService.parseAndFindByJwt(token));
         return ResponseEntity.ok(Response.<TransactionalStatisticBody>builder().body(statistic).build());
     }
