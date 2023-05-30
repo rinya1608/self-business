@@ -49,6 +49,7 @@ const TransactionalDiagrams = () => {
         }
         console.log(transactionStatistic)
         dispatch(getTransactionalStatistic(filter));
+        console.log(transactionStatistic)
     }, [message, getPageTrigger])
 
     const reset = () => {
@@ -109,23 +110,23 @@ const TransactionalDiagrams = () => {
 
     const typeBarDiagramOptions = {
         animationEnabled: true,
-        theme: "light2",
+        theme: "light1",
         title:{
-            text: "Количество затрачиваемых расходных материалов"
+            text: "Траты на расходные материалы"
         },
         axisX: {
             title: "Расходный материал",
             reversed: true,
         },
         axisY: {
-            title: "Количество",
+            title: "Сумма, руб.",
             includeZero: true
         },
         data: [{
             type: "bar",
             dataPoints: transactionStatistic?.typeInfo
                 .map((t) => {
-                    return { y:  t.count, label: t.typeName }
+                    return { y:  parseFloat(t.sum), label: t.typeName }
                 })
         }]
     }
