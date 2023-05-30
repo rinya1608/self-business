@@ -7,6 +7,7 @@ import com.ren.selfbusiness.dto.response.TransactionBody;
 import com.ren.selfbusiness.dto.response.TransactionalStatisticBody;
 import com.ren.selfbusiness.dto.response.TypeStatisticInfoBody;
 import com.ren.selfbusiness.mapper.EntityMapper;
+import com.ren.selfbusiness.model.History;
 import com.ren.selfbusiness.model.Transaction;
 import com.ren.selfbusiness.model.User;
 import com.ren.selfbusiness.repository.TransactionRepository;
@@ -78,9 +79,10 @@ public class TransactionServiceImpl implements TransactionService {
                 String typeName = t.getResource().getType().getName();
                 TypeStatisticInfoBody typeInfo = infoByTypeName.getOrDefault(typeName,
                         new TypeStatisticInfoBody(typeName, "0", 0));
-                typeInfo.setCount(typeInfo.getCount() + 1);
+                typeInfo.setCount(typeInfo.getCount() + t.getResource().getUsedCount());
                 typeInfo.setSum(new BigDecimal(typeInfo.getSum()).add(transactionSum).toString());
                 infoByTypeName.put(typeName, typeInfo);
+
             } else {
                 income = income.add(transactionSum);
 

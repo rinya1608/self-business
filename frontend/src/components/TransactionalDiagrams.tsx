@@ -84,7 +84,7 @@ const TransactionalDiagrams = () => {
         }]
     }
 
-    const options = {
+    const templateBarDiagramOptions = {
         animationEnabled: true,
         theme: "light2",
         title:{
@@ -103,6 +103,29 @@ const TransactionalDiagrams = () => {
             dataPoints: transactionStatistic?.templateInfo
                 .map((t) => {
                     return { y:  t.count, label: t.templateName }
+                })
+        }]
+    }
+
+    const typeBarDiagramOptions = {
+        animationEnabled: true,
+        theme: "light2",
+        title:{
+            text: "Количество затрачиваемых расходных материалов"
+        },
+        axisX: {
+            title: "Расходный материал",
+            reversed: true,
+        },
+        axisY: {
+            title: "Количество",
+            includeZero: true
+        },
+        data: [{
+            type: "bar",
+            dataPoints: transactionStatistic?.typeInfo
+                .map((t) => {
+                    return { y:  t.count, label: t.typeName }
                 })
         }]
     }
@@ -278,7 +301,12 @@ const TransactionalDiagrams = () => {
                         <Box sx={{
                             mt: 5
                         }}>
-                            <CanvasJSChart options = {options}/>
+                            <CanvasJSChart options = {templateBarDiagramOptions}/>
+                        </Box>
+                        <Box sx={{
+                            mt: 5
+                        }}>
+                            <CanvasJSChart options = {typeBarDiagramOptions}/>
                         </Box>
                         <Box sx={{
                             flexGrow: 3,

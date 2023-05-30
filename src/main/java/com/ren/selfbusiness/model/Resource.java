@@ -45,6 +45,10 @@ public class Resource {
         return unitPrice.multiply(BigDecimal.valueOf(count));
     }
 
+    public Integer getUsedCount() {
+        return history.stream().map(History::getCount).reduce(0, Integer::sum);
+    }
+
     public void addResourceHistory(History history) {
         this.history.add(history);
     }
