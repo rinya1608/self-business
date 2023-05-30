@@ -17,7 +17,7 @@ import {
 import MenuIcon from '@mui/icons-material/Menu';
 import {useAppDispatch, useAppSelector} from "../hooks/redux";
 import {getCurrentUser, logout} from "../api/auth";
-import {MAIN} from "../constants/Urls";
+import {LOGIN, MAIN} from "../constants/Urls";
 import ResourceTypeDialog from "./ResourceTypeDialog";
 import TemplateDialog from "./TemplateDialog";
 import {CurrentUserState} from "../store/reducers/CurrentUserSlice";
@@ -41,12 +41,14 @@ const Header = () => {
     const {user, isLoading, error}: CurrentUserState = useAppSelector(state => state.currentUserReducer)
 
     useEffect(() => {
-        dispatch(getCurrentUser())
+        dispatch(getCurrentUser()).then((r) => {
+            if (!r || !r.body) window.location.href = LOGIN;
+        })
     }, [])
 
     const logoutEvent = () => {
         dispatch(logout())
-        window.location.href = MAIN;
+        window.location.href = LOGIN;
     }
 
     const createMenuHandleClick = (event: React.MouseEvent<HTMLButtonElement>) => {

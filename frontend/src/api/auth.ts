@@ -71,7 +71,7 @@ export const reg = (req: IRegData) => async (dispatch: AppDispatch) => {
 export const getCurrentUser = () => async (dispatch: AppDispatch) => {
     try {
         dispatch(currentUserSlice.actions.userFetching())
-        let res = await fetch('/api/users/current', {
+        return await fetch('/api/users/current', {
             method: 'post',
             headers: getJwtTokenHeader()
         }).then(response => {

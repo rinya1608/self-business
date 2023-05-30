@@ -56,17 +56,14 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .cors().disable()
-                .csrf().disable()
+                .cors().and().csrf().disable()
                 .exceptionHandling().authenticationEntryPoint(entryPoint)
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeHttpRequests()
-                .requestMatchers("/api/auth/**", "/swagger-ui/**", "/v3/**").permitAll()
-                .and()
-                .authorizeHttpRequests()
-                .anyRequest().authenticated()
+                .requestMatchers("/**","/api/auth/**", "/api/users/*", "/swagger-ui/**", "/v3/**").permitAll()
+                .requestMatchers("/api/**").authenticated()
                 .and()
                 .formLogin()
                 .loginPage("/login").permitAll()

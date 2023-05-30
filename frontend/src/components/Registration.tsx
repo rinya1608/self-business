@@ -15,7 +15,7 @@ import React, {useState} from "react";
 import {useAppDispatch, useAppSelector} from "../hooks/redux";
 import {reg} from "../api/auth";
 import {IRegData} from "../models/IRegData";
-import {MAIN} from "../constants/Urls";
+import {LOGIN, MAIN} from "../constants/Urls";
 import {MessageState} from "../store/reducers/MesageSlice";
 import {IError} from "../models/IError";
 import {Visibility, VisibilityOff} from "@mui/icons-material";
@@ -89,7 +89,7 @@ function Registration() {
     }
 
     const forward = () => {
-        window.location.href = MAIN;
+        window.location.href = LOGIN;
     }
 
     return (

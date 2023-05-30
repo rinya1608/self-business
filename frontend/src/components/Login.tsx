@@ -33,10 +33,10 @@ function Login() {
     const [sbParams, setSbParams] = useState<SnackBarParams>({open: false, severity: 'error', message: 'me'});
 
     useEffect(() => {
-        dispatch(getCurrentUser()).then(() => {
-            if (user != null) window.location.href = MAIN;
+        dispatch(getCurrentUser()).then((r) => {
+            if (r && r.body) window.location.href = MAIN;
         })
-    }, [user])
+    }, [])
 
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault()
@@ -50,7 +50,8 @@ function Login() {
             }
             dispatch(auth(authData)).then((r) => {
                 if (r && r.error)
-                    setSbParams({open: true, severity: 'error', message: r.error.message})
+                    setSbParams({open: true, severity: 'error', message: r.error.message});
+                else if (r && r.body) window.location.href = MAIN;
             })
         } else {
             if (!email) setEmailError({helperText: 'Поле не должно быть пустым', error: true})
