@@ -142,7 +142,8 @@ const Header = () => {
                             {[{text: "Склад", href: "/resource-types"},
                                 {text: "Продукция/Услуги", href: "/template"},
                                 {text: "История операций", href: "/history"},
-                                {text: "Статистика", href: "/statistic"}].map((el: DrawerListEl, index) => (
+                                {text: "Статистика", href: "/statistic"},
+                                {text: "Контакты", href: "/contact"}].map((el: DrawerListEl, index) => (
                                 <ListItem key={index} disablePadding>
                                     <ListItemButton type="link" href={el.href}>
                                         <ListItemText primary={el.text}/>

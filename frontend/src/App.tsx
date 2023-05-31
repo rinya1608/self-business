@@ -8,6 +8,7 @@ import OperationHistory from "./components/OperationHistory";
 import Template from "./components/Template";
 import TransactionalDiagrams from "./components/TransactionalDiagrams";
 import {LOGIN, MAIN, TEMPLATE, TYPE} from "./constants/Urls";
+import Contacts from "./components/Contacts";
 
 const App = () => {
     return (
@@ -18,6 +19,7 @@ const App = () => {
             <Route path={TEMPLATE} element={<Wrapper><Template/></Wrapper>}/>
             <Route path="/history" element={<Wrapper><OperationHistory/></Wrapper>}/>
             <Route path="/statistic" element={<Wrapper><TransactionalDiagrams/></Wrapper>}/>
+            <Route path="/contact" element={<Wrapper><Contacts/></Wrapper>}/>
             <Route path="*" element={<Navigate to={MAIN} replace={true} />}/>
         </Routes>
     );
