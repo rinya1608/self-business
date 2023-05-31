@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import {Box, Button, Checkbox, Container, FormControlLabel, Typography} from "@mui/material";
+import {Box, Button, Container, Typography} from "@mui/material";
 
 import {useAppDispatch, useAppSelector} from "../hooks/redux";
 import {MessageState} from "../store/reducers/MesageSlice";
@@ -14,11 +14,17 @@ import {RUB} from "../constants/CurrencyConstants";
 
 // @ts-ignore
 import CanvasJSReact from '@canvasjs/react-charts';
+import {IDateInfo} from "../models/IDateInfo";
 
 var CanvasJS = CanvasJSReact.CanvasJS;
 var CanvasJSChart = CanvasJSReact.CanvasJSChart;
 
+interface DateInfoArrays {
+    byMonth: IDateInfo[]
+}
+
 const TransactionalDiagrams = () => {
+
 
     const DatePickerStyle = createGlobalStyle`
       .datepicker input {
@@ -28,8 +34,10 @@ const TransactionalDiagrams = () => {
 
     const [dateFrom, setDateFrom] = React.useState<Dayjs | null>(null);
     const [dateTo, setDateTo] = React.useState<Dayjs | null>(null);
+    const [dateInfo, setDateInfo] = React.useState<DateInfoArrays | null>(null);
 
     const [getPageTrigger, setGetPageTrigger] = React.useState(true);
+
 
     const dispatch = useAppDispatch()
     const {
@@ -40,6 +48,8 @@ const TransactionalDiagrams = () => {
     const {message}: MessageState = useAppSelector(state => state.messageReducer)
 
 
+    let dateInfoArrays: DateInfoArrays | null  = null;
+
     useEffect(() => {
         let filter: TransactionFilterData = {
             getIncome: true,
@@ -47,10 +57,26 @@ const TransactionalDiagrams = () => {
             dateFrom: dateFrom ? dateFrom.format('YYYY-MM-DD') : null,
             dateTo: dateTo ? dateTo.format('YYYY-MM-DD') : null
         }
-        console.log(transactionStatistic)
-        dispatch(getTransactionalStatistic(filter));
-        console.log(transactionStatistic)
+        dispatch(getTransactionalStatistic(filter))
     }, [message, getPageTrigger])
+
+
+    useEffect(() => {
+        if (transactionStatistic) {
+            let map = new Map<string, IDateInfo>();
+            transactionStatistic.dateInfo.forEach((dateInfo) => {
+                let date = new Date(dateInfo.date);
+                let monthAndYear = date.getMonth()+ " " + date.getFullYear();
+                console.log(monthAndYear)
+                let mapValue = map.get(monthAndYear);
+                if (mapValue)
+                    map?.set(monthAndYear, {date: dateInfo.date, sum: String(parseFloat(mapValue?.sum) + parseFloat(dateInfo.sum))})
+                else map?.set(monthAndYear, {date: dateInfo.date, sum: dateInfo.sum})
+            })
+            setDateInfo({byMonth: Array.from(map.values())})
+        }
+    }, [transactionStatistic])
+
 
     const reset = () => {
         setDateTo(null);
@@ -85,10 +111,32 @@ const TransactionalDiagrams = () => {
         }]
     }
 
+    const options = {
+        theme: "light2",
+        title: {
+            text: "Ежемесячная прибыль"
+        },
+        axisX: {
+            valueFormatString: "MMM YYYY"
+        },
+        axisY: {
+            valueFormatString: "#,##0.00₽"
+        },
+        data: [{
+            type: "line",
+            xValueFormatString: "MMM YYYY",
+            yValueFormatString: "#,##0.00₽",
+            dataPoints: dateInfo?.byMonth.map( dateInfo => {
+                console.log(dateInfo)
+                return {y: parseFloat(dateInfo.sum), x: new Date(new Date(dateInfo.date).getTime())}
+            })
+        }]
+    }
+
     const templateBarDiagramOptions = {
         animationEnabled: true,
         theme: "light2",
-        title:{
+        title: {
             text: "Наиболее популярные продукты/услуги"
         },
         axisX: {
@@ -103,7 +151,7 @@ const TransactionalDiagrams = () => {
             type: "bar",
             dataPoints: transactionStatistic?.templateInfo
                 .map((t) => {
-                    return { y:  t.count, label: t.templateName }
+                    return {y: t.count, label: t.templateName}
                 })
         }]
     }
@@ -111,7 +159,7 @@ const TransactionalDiagrams = () => {
     const typeBarDiagramOptions = {
         animationEnabled: true,
         theme: "light1",
-        title:{
+        title: {
             text: "Траты на расходные материалы"
         },
         axisX: {
@@ -120,13 +168,14 @@ const TransactionalDiagrams = () => {
         },
         axisY: {
             title: "Сумма, руб.",
+            valueFormatString: "#,##0.00₽",
             includeZero: true
         },
         data: [{
             type: "bar",
             dataPoints: transactionStatistic?.typeInfo
                 .map((t) => {
-                    return { y:  parseFloat(t.sum), label: t.typeName }
+                    return {y: parseFloat(t.sum), label: t.typeName}
                 })
         }]
     }
@@ -231,15 +280,17 @@ const TransactionalDiagrams = () => {
                     }}>
                         <Box sx={{
                             display: 'flex',
+                            justifyContent: 'space-between',
                             width: '100%',
                             height: '158px'
                         }}>
                             <Box sx={{
                                 boxShadow: 2,
+                                width: 'calc(100% / 3 - 13px)',
                                 borderRadius: 2,
-                                width: "30%",
                                 height: '100%',
-                                pl: 2
+                                pl: 2,
+                                pb: 3.2
                             }}>
                                 <Typography variant='h6'>Итог</Typography>
                                 <Box sx={{
@@ -256,10 +307,12 @@ const TransactionalDiagrams = () => {
                             <Box sx={{
                                 boxShadow: 2,
                                 borderRadius: 2,
-                                width: "30%",
+                                width: 'calc(100% / 3 - 13px)',
                                 height: '100%',
                                 pl: 2,
-                                ml: 3
+                                pr: 2,
+                                pb: 3.2,
+                                ml: 2
                             }}>
                                 <Typography variant='h6'>Доход</Typography>
                                 <Box sx={{
@@ -276,10 +329,12 @@ const TransactionalDiagrams = () => {
                             <Box sx={{
                                 boxShadow: 2,
                                 borderRadius: 2,
-                                width: "30%",
+                                width: 'calc(100% / 3 - 13px)',
                                 height: '100%',
                                 pl: 2,
-                                ml: 3
+                                pr: 2,
+                                pb: 3.2,
+                                ml: 2
                             }}>
                                 <Typography variant='h6'>Расход</Typography>
                                 <Box sx={{
@@ -295,19 +350,72 @@ const TransactionalDiagrams = () => {
                             </Box>
                         </Box>
                         <Box sx={{
-                            mt: 2
-                        }}>
-                            <CanvasJSChart options = {IncomeExpensesDiagramOptions}/>
-                        </Box>
-                        <Box sx={{
+                            boxShadow: 2,
+                            borderRadius: 2,
+                            width: "100%",
+                            height: '100%',
+                            pt: 2,
+                            pb: 2,
                             mt: 5
                         }}>
-                            <CanvasJSChart options = {templateBarDiagramOptions}/>
+                            <Box sx={{
+                                width: '94%',
+                                margin: 'auto'
+                            }}>
+                                <CanvasJSChart options={IncomeExpensesDiagramOptions}/>
+                            </Box>
                         </Box>
+                        {
+                            transactionStatistic ? <Box sx={{
+                                boxShadow: 2,
+                                borderRadius: 2,
+                                width: "100%",
+                                height: '100%',
+                                pt: 2,
+                                pb: 2,
+                                mt: 5
+                            }}>
+                                <Box sx={{
+                                    width: '94%',
+                                    margin: 'auto'
+                                }}>
+                                    <CanvasJSChart options={options} />
+                                </Box>
+
+                            </Box> : null
+                        }
                         <Box sx={{
+                            boxShadow: 2,
+                            borderRadius: 2,
+                            width: "100%",
+                            height: '100%',
+                            pt: 2,
+                            pb: 2,
                             mt: 5
                         }}>
-                            <CanvasJSChart options = {typeBarDiagramOptions}/>
+                            <Box sx={{
+                                width: '94%',
+                                margin: 'auto'
+                            }}>
+                                <CanvasJSChart options={templateBarDiagramOptions}/>
+                            </Box>
+
+                        </Box>
+                        <Box sx={{
+                            boxShadow: 2,
+                            borderRadius: 2,
+                            width: "100%",
+                            height: '100%',
+                            pt: 2,
+                            pb: 2,
+                            mt: 5
+                        }}>
+                            <Box sx={{
+                                width: '94%',
+                                margin: 'auto'
+                            }}>
+                                <CanvasJSChart options={typeBarDiagramOptions}/>
+                            </Box>
                         </Box>
                         <Box sx={{
                             flexGrow: 3,

@@ -2,10 +2,7 @@ package com.ren.selfbusiness.service.impl;
 
 import com.ren.selfbusiness.dto.request.TransactionFilterRequest;
 import com.ren.selfbusiness.dto.request.TransactionRequest;
-import com.ren.selfbusiness.dto.response.TemplateStatisticInfoBody;
-import com.ren.selfbusiness.dto.response.TransactionBody;
-import com.ren.selfbusiness.dto.response.TransactionalStatisticBody;
-import com.ren.selfbusiness.dto.response.TypeStatisticInfoBody;
+import com.ren.selfbusiness.dto.response.*;
 import com.ren.selfbusiness.mapper.EntityMapper;
 import com.ren.selfbusiness.model.History;
 import com.ren.selfbusiness.model.Transaction;
@@ -69,12 +66,20 @@ public class TransactionServiceImpl implements TransactionService {
         BigDecimal income = BigDecimal.ZERO;
         Map<String, TypeStatisticInfoBody> infoByTypeName = new HashMap<>();
         Map<String, TemplateStatisticInfoBody> infoByTemplateName = new HashMap<>();
+        Map<String, DateStatisticInfoBody> dateInfoByDate = new HashMap<>();
 
         for (Transaction t :
                 transactions) {
             BigDecimal transactionSum = t.getSum();
+
+            String dateStr = t.getDate().toString();
+            DateStatisticInfoBody dateStatisticInfoBody = dateInfoByDate.getOrDefault(dateStr, new DateStatisticInfoBody(dateStr, "0"));
+
+            dateInfoByDate.put(dateStr, dateStatisticInfoBody);
+
             if (t.getResource() != null) {
                 expenses = expenses.add(transactionSum);
+                dateStatisticInfoBody.setSum(new BigDecimal(dateStatisticInfoBody.getSum()).subtract(transactionSum).toString());
 
                 String typeName = t.getResource().getType().getName();
                 TypeStatisticInfoBody typeInfo = infoByTypeName.getOrDefault(typeName,
@@ -85,6 +90,7 @@ public class TransactionServiceImpl implements TransactionService {
 
             } else {
                 income = income.add(transactionSum);
+                dateStatisticInfoBody.setSum(new BigDecimal(dateStatisticInfoBody.getSum()).add(transactionSum).toString());
 
                 String templateName = t.getTemplate().getName();
                 TemplateStatisticInfoBody templateInfo = infoByTemplateName.getOrDefault(templateName,
@@ -100,6 +106,7 @@ public class TransactionServiceImpl implements TransactionService {
                 .expenses(expenses.toString())
                 .typeInfo(new ArrayList<>(infoByTypeName.values()))
                 .templateInfo(new ArrayList<>(infoByTemplateName.values()))
+                .dateInfo(new ArrayList<>(dateInfoByDate.values()))
                 .build();
     }
 }

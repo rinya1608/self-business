@@ -14,4 +14,5 @@ public class TransactionalStatisticBody {
     private String expenses;
     private List<TypeStatisticInfoBody> typeInfo;
     private List<TemplateStatisticInfoBody> templateInfo;
+    private List<DateStatisticInfoBody> dateInfo;
 }

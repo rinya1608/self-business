@@ -39,7 +39,7 @@ export const getPageWithTransaction = (page: number, size: number, filter: Trans
 
 export const getTransactionalStatistic = (filter: TransactionFilterData) => async (dispatch: AppDispatch) => {
     dispatch(transactionStatisticSlice.actions.transactionStatisticSliceFetching())
-    let res = await fetch('/api/transaction/statistic', {
+    return await fetch('/api/transaction/statistic', {
         method: 'post',
         headers: getJwtTokenHeader(),
         body: JSON.stringify(filter)
