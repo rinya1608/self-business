@@ -40,7 +40,7 @@ public class ResourceTypeController {
 
     @GetMapping
     public ResponseEntity<?> getResourceTypes(@RequestHeader(name = "Authorization") String token,
-                                              @RequestParam(defaultValue = "5") int size,
+                                              @RequestParam(defaultValue = "10") int size,
                                               @RequestParam(defaultValue = "0") int page) {
         Page<ResourceTypeBody> resourceTypeBodies = resourceTypeService.getAll(PageRequest.of(page, size),
                 userService.parseAndFindByJwt(token));
