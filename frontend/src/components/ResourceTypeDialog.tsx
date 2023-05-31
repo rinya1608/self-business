@@ -50,12 +50,19 @@ const ResourceTypeDialog = ({open, handleOpen, handleClose, resourceType = null}
             };
             dispatch(updateResourceType(resourceType.id, data));
             close();
+            window.location.href = TYPE
         }
     };
 
     const close = () => {
-        setName({value: '', error: false, helperText: ''});
-        setUnit({value: '', error: false, helperText: ''});
+        if (resourceType != null) {
+            setName({value: resourceType.name, error: false, helperText: ''});
+            setUnit({value: resourceType.unit, error: false, helperText: ''});
+        }
+        else {
+            setName({value: '', error: false, helperText: ''});
+            setUnit({value: '', error: false, helperText: ''});
+        }
         handleClose();
     }
 

@@ -11,7 +11,7 @@ import {statusResolve} from "../utils/errorUtils";
 
 export const getPageWithResourceTypes = (page: number, size: number) => async (dispatch: AppDispatch) => {
     dispatch(resourceTypeSlice.actions.resourceTypeFetching())
-    let res = await fetch('/api/type?page=' + (page - 1) + '&size=' + size, {
+    return  await fetch('/api/type?page=' + (page - 1) + '&size=' + size, {
         method: 'get',
         headers: getJwtTokenHeader()
     }).then(response => {
