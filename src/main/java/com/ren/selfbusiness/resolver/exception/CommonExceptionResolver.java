@@ -17,6 +17,16 @@ public class CommonExceptionResolver implements ExceptionResolver {
     }
 
     @Override
+    public RuntimeException resolve(String errorCode, String message, Throwable e) {
+        return new BusinessException(errorResolver.resolve(errorCode), message, e);
+    }
+
+    @Override
+    public RuntimeException resolve(String errorCode, String message) {
+        return new BusinessException(errorResolver.resolve(errorCode), message);
+    }
+
+    @Override
     public RuntimeException resolve(String errorCode, Throwable e) {
         return new BusinessException(errorResolver.resolve(errorCode), e);
     }

@@ -61,6 +61,6 @@ public class SaleServiceImpl implements SaleService {
             r.addResourceHistory(new History(delta, ResourceHistoryStatus.USED));
             ingredientCount -= delta;
         }
-        if (ingredientCount > 0) throw exceptionResolver.resolve(R_02);
+        if (ingredientCount > 0) throw exceptionResolver.resolve(R_02, "Не хватает " + ingredient.getResourceType().getName());
     }
 }

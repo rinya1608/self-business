@@ -117,7 +117,9 @@ const TransactionalDiagrams = () => {
             text: "Ежемесячная прибыль"
         },
         axisX: {
-            valueFormatString: "MMM YYYY"
+            valueFormatString: "MMM YYYY",
+            interval: 1,
+            intervalType: "month"
         },
         axisY: {
             valueFormatString: "#,##0.00₽"
@@ -128,7 +130,9 @@ const TransactionalDiagrams = () => {
             yValueFormatString: "#,##0.00₽",
             dataPoints: dateInfo?.byMonth.map( dateInfo => {
                 console.log(dateInfo)
-                return {y: parseFloat(dateInfo.sum), x: new Date(new Date(dateInfo.date).getTime())}
+                let date = new Date(dateInfo.date);
+                date.setDate(1);
+                return {y: parseFloat(dateInfo.sum), x: date}
             })
         }]
     }

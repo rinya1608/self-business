@@ -6,6 +6,7 @@ import com.ren.selfbusiness.dto.response.Response;
 import com.ren.selfbusiness.dto.response.ValidErrorBody;
 import com.ren.selfbusiness.exception.BusinessException;
 import lombok.extern.log4j.Log4j2;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -23,9 +24,10 @@ public class DefaultAdviceController {
     @ExceptionHandler({BusinessException.class})
     public ResponseEntity<?> exceptionHandler(BusinessException e) {
         ErrorDto error = e.getErrorDto();
+        String message = StringUtils.isBlank(e.getCustomMessage()) ? error.getMessage() : e.getCustomMessage();
         log.warn("error code: {} error message: {}", error.getCode(), error.getMessage(), e);
         return ResponseEntity.status(error.getHttpStatus())
-                .body(Response.builder().error(new ErrorBody(error.getCode(), error.getMessage())).build());
+                .body(Response.builder().error(new ErrorBody(error.getCode(), message)).build());
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

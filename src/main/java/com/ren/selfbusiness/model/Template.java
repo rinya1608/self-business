@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -27,13 +28,12 @@ public class Template {
     private User user;
 
     @OneToMany(mappedBy = "template", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Ingredient> ingredients;
+    private List<Ingredient> ingredients = new ArrayList<>();
 
-    public Template(String name, BigDecimal cost, User user, List<Ingredient> ingredients) {
+    public Template(String name, BigDecimal cost, User user) {
         this.name = name;
         this.cost = cost;
         this.user = user;
-        this.ingredients = ingredients;
     }
 
     public BigDecimal getNetProfit() {

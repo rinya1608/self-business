@@ -10,8 +10,19 @@ import lombok.Setter;
 @Setter
 public class BusinessException extends RuntimeException {
     private ErrorDto errorDto;
+    private String customMessage;
     public BusinessException(ErrorDto errorDto, Throwable e) {
         super(e);
         this.errorDto = errorDto;
+    }
+
+    public BusinessException(ErrorDto errorDto) {
+        this.errorDto = errorDto;
+    }
+
+    public BusinessException(ErrorDto errorDto, String customMessage, Throwable e) {
+        super(e);
+        this.errorDto = errorDto;
+        this.customMessage = customMessage;
     }
 }

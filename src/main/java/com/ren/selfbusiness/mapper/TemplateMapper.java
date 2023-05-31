@@ -29,6 +29,8 @@ public class TemplateMapper implements EntityMapper<TemplateBody, Template, Pair
     public Template toEntity(Pair<TemplateRequest, User> dtoParam) {
         TemplateRequest request = dtoParam.getFirst();
         List<Ingredient> ingredients = request.ingredients().stream().map(ingredientMapper::toEntity).toList();
-        return new Template(request.name(), new BigDecimal(request.cost()), dtoParam.getSecond(), ingredients);
+        Template template = new Template(request.name(), new BigDecimal(request.cost()), dtoParam.getSecond());
+        ingredients.forEach(template::addIngredient);
+        return template;
     }
 }
