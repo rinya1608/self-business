@@ -23,6 +23,7 @@ export const getPageWithTransaction = (page: number, size: number, filter: Trans
         }
     }).then((r => {
         if (r) {
+            console.log(r)
             if (r.error != null) {
                 dispatch(transactionSlice.actions.transactionFetchingError(r.error));
             } else if (r.body != null) {

@@ -26,8 +26,11 @@ public class ResourceType {
     @JoinColumn(name = "creator_id")
     private User creator;
 
-    @OneToMany(mappedBy = "type", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.PERSIST)
     private List<Resource> resources;
+
+    @OneToMany(mappedBy = "resourceType", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Ingredient> ingredients;
 
     public ResourceType(String name, String unit, User creator) {
         this.name = name;
@@ -38,5 +41,10 @@ public class ResourceType {
     public Integer getCount() {
         return resources.stream().map(Resource::getCount).reduce(0, Integer::sum);
     }
+
+    public void addResource(Resource resource) {
+        resources.add(resource);
+    }
+
 }
 

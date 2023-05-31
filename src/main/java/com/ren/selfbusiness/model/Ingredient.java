@@ -18,6 +18,10 @@ public class Ingredient {
     @JoinColumn(name = "resource_type_id")
     private ResourceType resourceType;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "template_id")
+    private Template template;
+
     private Integer count;
 
     public Ingredient(ResourceType resourceType, Integer count) {

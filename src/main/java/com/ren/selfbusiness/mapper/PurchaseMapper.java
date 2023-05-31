@@ -37,7 +37,7 @@ public class PurchaseMapper implements EntityMapper<PurchaseBody, Purchase, Pair
         PurchaseRequest req = PurchaseReqAndUser.getFirst();
         User user = PurchaseReqAndUser.getSecond();
         Resource resource = resourceService.addResource(req.resource(), user);
-        Transaction transaction = transactionService.addTransaction(new TransactionRequest(resource.getFullPrice().toString()), user);
+        Transaction transaction = transactionService.addTransaction(new TransactionRequest(resource.getPrice().toString()), user);
         return new Purchase(resource, transaction, user);
     }
 }

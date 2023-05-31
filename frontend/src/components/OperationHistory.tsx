@@ -61,6 +61,7 @@ const OperationHistory = () => {
         }
         dispatch(getPageWithTransaction(page > 0 ? page : 1, 10, filter));
         if (page <= 0) dispatch(transactionSlice.actions.transactionFetchingClear());
+
     }, [page, message, getPageTrigger])
     const handleChangePage = (event: React.ChangeEvent<unknown>, value: number) => {
         setPage(value);
@@ -110,7 +111,7 @@ const OperationHistory = () => {
                         </Avatar>
                     </ListItemAvatar>
                     <ListItemText
-                        primary={el.resource.type.name}
+                        primary={el.resource.typeName}
                         secondary={new Date(el.date).toLocaleString()}
                     />
                     <ListItemText sx={{

@@ -22,10 +22,10 @@ public class Resource {
 
     private Integer count;
     private BigDecimal unitPrice;
+    private BigDecimal price;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "type_id")
-    private ResourceType type;
+    private String typeName;
+    private String unit;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "creator_id")
@@ -34,15 +34,13 @@ public class Resource {
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     private List<History> history;
 
-    public Resource(Integer count, BigDecimal unitPrice, ResourceType type, User creator) {
+    public Resource(Integer count, BigDecimal price, BigDecimal unitPrice, ResourceType type, User creator) {
         this.count = count;
+        this.price = price;
         this.unitPrice = unitPrice;
-        this.type = type;
+        this.typeName = type.getName();
+        this.unit = type.getUnit();
         this.creator = creator;
-    }
-
-    public BigDecimal getFullPrice() {
-        return unitPrice.multiply(BigDecimal.valueOf(count));
     }
 
     public Integer getUsedCount() {

@@ -22,16 +22,15 @@ public class ResourceMapper implements EntityMapper<ResourceBody, Resource, Pair
 
     @Override
     public ResourceBody toDto(Resource resource) {
-        ResourceTypeBody type = mapper.toDto(resource.getType());
         return new ResourceBody(resource.getId(), resource.getCount(),
-                resource.getUnitPrice().toString(), type);
+                resource.getPrice().toString(), resource.getUnitPrice().toString(), resource.getTypeName(), resource.getUnit());
     }
 
     @Override
     public Resource toEntity(Pair<ResourceRequest, User> resourceRequestAndUser) {
         ResourceRequest resourceRequest = resourceRequestAndUser.getFirst();
         ResourceType type = resourceTypeService.getResourceTypeById(resourceRequest.typeId());
-        return new Resource(resourceRequest.count(), new BigDecimal(resourceRequest.unitPrice()),
-                type, resourceRequestAndUser.getSecond());
+        return new Resource(resourceRequest.count(), new BigDecimal(resourceRequest.price()),
+                new BigDecimal(resourceRequest.unitPrice()), type, resourceRequestAndUser.getSecond());
     }
 }

@@ -4,6 +4,7 @@ import com.ren.selfbusiness.dto.request.ResourceRequest;
 import com.ren.selfbusiness.dto.response.ResourceBody;
 import com.ren.selfbusiness.mapper.EntityMapper;
 import com.ren.selfbusiness.model.Resource;
+import com.ren.selfbusiness.model.ResourceType;
 import com.ren.selfbusiness.model.User;
 import com.ren.selfbusiness.repository.ResourceRepository;
 import com.ren.selfbusiness.resolver.exception.ExceptionResolver;
@@ -33,6 +34,8 @@ public class ResourceServiceImpl implements ResourceService {
     @Override
     public Resource addResource(ResourceRequest req, User user) {
         Resource resource = mapper.toEntity(Pair.of(req, user));
+        ResourceType type = resourceTypeService.getResourceTypeById(req.typeId());
+        type.addResource(resource);
         return resourceRepository.save(resource);
     }
 
@@ -41,8 +44,12 @@ public class ResourceServiceImpl implements ResourceService {
     public void updateResource(Long id, ResourceRequest req) {
         Resource resource = resourceRepository.getReferenceById(id);
         if (req.count() != null) resource.setCount(req.count());
-        if (req.unitPrice() != null) resource.setUnitPrice(new BigDecimal(req.unitPrice()));
-        if (req.typeId() != null) resource.setType(resourceTypeService.getResourceTypeById(req.typeId()));
+        if (req.price() != null) resource.setPrice(new BigDecimal(req.price()));
+        if (req.typeId() != null) {
+            ResourceType type = resourceTypeService.getResourceTypeById(req.typeId());
+            resource.setTypeName(type.getName());
+            resource.setUnit(type.getUnit());
+        }
     }
 
     @Transactional

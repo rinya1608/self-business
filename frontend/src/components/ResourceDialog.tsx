@@ -54,6 +54,7 @@ const ResourceDialog = ({open, handleOpen, handleClose, resourceType}: Props) =>
                 resource: {
                     count: count.value,
                     unitPrice: unitPrice.value,
+                    price: sum.value,
                     typeId: resourceType.id
                 }
             };

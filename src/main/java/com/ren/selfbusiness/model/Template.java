@@ -26,7 +26,7 @@ public class Template {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "template", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Ingredient> ingredients;
 
     public Template(String name, BigDecimal cost, User user, List<Ingredient> ingredients) {
@@ -44,10 +44,12 @@ public class Template {
     }
 
     public void addIngredient(Ingredient ingredient) {
-        ingredients.add(ingredient);
+        ingredient.setTemplate(this);
+        boolean added = ingredients.add(ingredient);
     }
 
     public void removeIngredient(Ingredient ingredient) {
-        ingredients.remove(ingredient);
+        boolean removed = ingredients.remove(ingredient);
+        if (removed) ingredient.setTemplate(null);
     }
 }

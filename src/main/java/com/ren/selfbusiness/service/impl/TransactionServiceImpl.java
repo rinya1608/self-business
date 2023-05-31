@@ -81,7 +81,7 @@ public class TransactionServiceImpl implements TransactionService {
                 expenses = expenses.add(transactionSum);
                 dateStatisticInfoBody.setSum(new BigDecimal(dateStatisticInfoBody.getSum()).subtract(transactionSum).toString());
 
-                String typeName = t.getResource().getType().getName();
+                String typeName = t.getResource().getTypeName();
                 TypeStatisticInfoBody typeInfo = infoByTypeName.getOrDefault(typeName,
                         new TypeStatisticInfoBody(typeName, "0", 0));
                 typeInfo.setCount(typeInfo.getCount() + t.getResource().getUsedCount());

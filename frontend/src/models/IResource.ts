@@ -3,6 +3,8 @@ import {IResourceType} from "./IResourceType";
 export interface IResource {
     id: number,
     count: number,
+    price: string,
     unitPrice: string,
-    type: IResourceType
+    typeName: string,
+    unit: string
 }
