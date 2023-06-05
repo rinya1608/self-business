@@ -45,12 +45,18 @@ interface OrderTemplateField {
 }
 
 const OrderDialog = ({open, handleOpen, handleClose, order = null}: Props) => {
+    const getDefaultDate = (): Date => {
+        let nowDate = new Date();
+        nowDate.setMinutes(nowDate.getMinutes() + 1)
+        return nowDate
+    }
+
 
     const dispatch = useAppDispatch()
     const {templatePage, isLoading, error}: TemplateSlice = useAppSelector(state => state.templateReducer)
     const {message}: MessageState = useAppSelector(state => state.messageReducer)
 
-    const [date, setDate] = React.useState<Dayjs | null>(null);
+    const [date, setDate] = React.useState<Dayjs | null>(dayjs(getDefaultDate()));
     const [name, setName] = useState<FieldType<string>>({value: '', error: false, helperText: ''});
     const [contact, setContact] = useState<FieldType<string>>({value: '', error: false, helperText: ''});
     const [templates, setTemplates] = useState<OrderTemplateField[] | null>(null);
@@ -178,6 +184,8 @@ const OrderDialog = ({open, handleOpen, handleClose, order = null}: Props) => {
         });
     }
 
+
+
     const templateFields = templates?.map((el, index) => {
         return (
             <Box sx={{
@@ -253,6 +261,8 @@ const OrderDialog = ({open, handleOpen, handleClose, order = null}: Props) => {
                 }}>
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <DateTimePicker value={date}
+                                        minDateTime={dayjs(new Date())}
+                                        defaultValue={dayjs(getDefaultDate())}
                                         className={"datetimepicker"}
                                         ampm={false}
                                         label='Дата'
