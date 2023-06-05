@@ -1,4 +1,4 @@
-import React, {useEffect, useLayoutEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
     Box,
     Button,
@@ -7,7 +7,7 @@ import {
     DialogContent,
     DialogTitle,
     FormControl,
-    IconButton, InputAdornment,
+    IconButton,
     InputLabel,
     MenuItem,
     Select,
@@ -15,26 +15,20 @@ import {
     TextField
 } from "@mui/material";
 import {useAppDispatch, useAppSelector} from "../hooks/redux";
-import {getPageWithResourceTypes} from "../api/resourceType";
-import {IResourceType} from "../models/IResourceType";
 import {FieldType} from "../types/FieldType";
-import resourceType from "./ResourceType";
 import {ITemplate} from "../models/ITemplate";
-import {ITemplateData} from "../models/ITemplateData";
-import {IIngredientData} from "../models/IIngredientData";
-import {addTemplate, getPageWithTemplates, updateTemplate} from "../api/template";
-import {ResourceTypeState} from "../store/reducers/ResourceTypeSlice";
+import {getPageWithTemplates} from "../api/template";
 import {MessageState} from "../store/reducers/MesageSlice";
 import DeleteIcon from "@mui/icons-material/Delete";
-import {isNumber} from "../utils/TypeUtils";
-import {ORDER, TEMPLATE} from "../constants/Urls";
+import {ORDER} from "../constants/Urls";
 import {Dayjs} from "dayjs";
+import dayjs from "dayjs";
 import {IOrder} from "../models/IOrder";
 import {IOrderData} from "../models/IOrderData";
 import {IOrderTemplateData} from "../models/IOrderTemplateData";
 import {TemplateSlice} from "../store/reducers/TemplateSlice";
 import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
-import {DatePicker, DateTimePicker, LocalizationProvider} from "@mui/x-date-pickers";
+import {DateTimePicker, LocalizationProvider} from "@mui/x-date-pickers";
 import {addOrder, updateOrder} from "../api/order";
 
 
@@ -66,6 +60,7 @@ const OrderDialog = ({open, handleOpen, handleClose, order = null}: Props) => {
         if (order != null) {
             setName({value: order.clientInfo.name, error: false, helperText: ''})
             setContact({value: order.clientInfo.contact, error: false, helperText: ''})
+            setDate(dayjs(new Date(order.date)))
             let tempTemplates: OrderTemplateField[] = []
             order.templates.forEach(t => {
                 tempTemplates = [
@@ -77,9 +72,8 @@ const OrderDialog = ({open, handleOpen, handleClose, order = null}: Props) => {
                 ]
             })
             setTemplates(tempTemplates)
-        }
-        else setTemplates([])
-    }, [order])
+        } else setTemplates([])
+    }, [order, open])
 
     useEffect(() => {
         dispatch(getPageWithTemplates(1, 99999999));
@@ -109,8 +103,7 @@ const OrderDialog = ({open, handleOpen, handleClose, order = null}: Props) => {
                 };
                 if (order) {
                     dispatch(updateOrder(order.id, data));
-                }
-                else dispatch(addOrder(data));
+                } else dispatch(addOrder(data));
                 close();
                 window.location.href = ORDER;
             } catch (e) {
@@ -227,7 +220,7 @@ const OrderDialog = ({open, handleOpen, handleClose, order = null}: Props) => {
     });
 
     return (
-        <Dialog open={open} onClose={handleOpen} aria-labelledby="form-dialog-title">
+        <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
             <DialogTitle id="form-dialog-title">Добавить заказ</DialogTitle>
             <DialogContent>
                 <TextField

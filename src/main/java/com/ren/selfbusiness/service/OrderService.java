@@ -1,5 +1,6 @@
 package com.ren.selfbusiness.service;
 
+import com.ren.selfbusiness.dto.request.OrderFilterRequest;
 import com.ren.selfbusiness.dto.request.OrderRequest;
 import com.ren.selfbusiness.dto.response.OrderBody;
 import com.ren.selfbusiness.model.Order;
@@ -14,7 +15,7 @@ public interface OrderService {
 
     void changeStatus(Long id, String command, User user);
 
-    Page<OrderBody> getPageWithOrders(Pageable pageable, User user);
+    Page<OrderBody> getPageWithOrders(OrderFilterRequest filter, Pageable pageable, User user);
 
     Order getOrderById(Long id);
 }

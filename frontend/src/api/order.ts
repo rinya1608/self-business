@@ -9,6 +9,7 @@ import {IOrderData} from "../models/IOrderData";
 import {IOrder} from "../models/IOrder";
 import {orderSlice} from "../store/reducers/OrderSlice";
 import {OrderStatus} from "../constants/OrderStatus";
+import {IOrderFilter} from "../models/IOrderFilter";
 
 
 export const addOrder = (data: IOrderData) => async (dispatch: AppDispatch) => {
@@ -61,11 +62,12 @@ export const updateOrder = (id: number, data: IOrderData) => async (dispatch: Ap
     });
 }
 
-export const getPageWithOrders = (page: number, size: number) => async (dispatch: AppDispatch) => {
+export const getPageWithOrders = (data: IOrderFilter, page: number, size: number) => async (dispatch: AppDispatch) => {
     dispatch(orderSlice.actions.orderFetching())
-    return await fetch('/api/order?page=' + (page - 1) + '&size=' + size, {
-        method: 'get',
-        headers: getJwtTokenHeader()
+    return await fetch('/api/order/all?page=' + (page - 1) + '&size=' + size, {
+        method: 'post',
+        headers: getJwtTokenHeader(),
+        body: JSON.stringify(data)
     }).then(response => {
         if (response.ok)
             return response.json() as Promise<Response<IPage<IOrder>>>;

@@ -5,9 +5,9 @@ import {
     Card,
     CardActionArea,
     CardActions,
-    CardContent,
-    Container,
-    Grid,
+    CardContent, Checkbox,
+    Container, FormControlLabel,
+    Grid, IconButton,
     Pagination,
     Typography
 } from "@mui/material";
@@ -18,11 +18,18 @@ import {createGlobalStyle} from "styled-components";
 import {changeOrderStatus, getPageWithOrders} from "../api/order";
 import {orderSlice, OrderSlice} from "../store/reducers/OrderSlice";
 import {getStatus} from "../utils/OrderUtils";
-import {CANCEL_COMMAND, CANCELED, GIVEN, NEXT_COMMAND, OrderStatus} from "../constants/OrderStatus";
+import {ADDED, CANCEL_COMMAND, CANCELED, GIVEN, NEXT_COMMAND, OrderStatus, READY} from "../constants/OrderStatus";
 import {RUB} from "../constants/CurrencyConstants";
 import OrderViewDialog from "./OrderViewDialog";
 import {IOrder} from "../models/IOrder";
 import {CustomSnackBar, SnackBarParams} from "./CustomSnackBar";
+import {DatePicker, LocalizationProvider} from "@mui/x-date-pickers";
+import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
+import {Dayjs} from "dayjs";
+import {IOrderFilter} from "../models/IOrderFilter";
+import EditNoteIcon from '@mui/icons-material/EditNote';
+import TemplateDialog from "./TemplateDialog";
+import OrderDialog from "./OrderDialog";
 
 const Order = () => {
 
@@ -36,9 +43,14 @@ const Order = () => {
     const [pageCount, setPageCount] = React.useState(1);
     const [orderViewDialog, setOrderViewDialog] = useState(false);
     const [sbParams, setSbParams] = useState<SnackBarParams>({open: false, severity: 'error', message: 'me'});
+    const [added, setAdded] = React.useState(true);
+    const [ready, setReady] = React.useState(true);
+    const [given, setGiven] = React.useState(true);
+    const [canceled, setCanceled] = React.useState(true);
 
 
     const [order, setOrder] =useState<IOrder | null>();
+    const [orderDialog, setOrderDialog] =useState(false);
 
     const [getPageTrigger, setGetPageTrigger] = React.useState(true);
 
@@ -51,13 +63,15 @@ const Order = () => {
     }, [orderPage])
 
     useEffect(() => {
-        /*let filter: TransactionFilterData = {
-            getIncome: getIncome,
-            getSales: getSales,
-            dateFrom: dateFrom ? dateFrom.format('YYYY-MM-DD') : null,
-            dateTo: dateTo ? dateTo.format('YYYY-MM-DD') : null
-        }*/
-        dispatch(getPageWithOrders(page, 10));
+        let statusList: string[] = []
+        if (added) statusList.push(ADDED.name)
+        if (given) statusList.push(GIVEN.name)
+        if (ready) statusList.push(READY.name)
+        if (canceled) statusList.push(CANCELED.name)
+        let filter: IOrderFilter = {
+            orderStatusList: statusList
+        }
+        dispatch(getPageWithOrders(filter, page, 10));
         if (page <= 0) dispatch(orderSlice.actions.orderFetchingClear());
 
     }, [page, message, getPageTrigger])
@@ -99,10 +113,54 @@ const Order = () => {
         setOrderViewDialog(false);
     };
 
+    const orderDialogHandleOpen = () => {
+        setOrderDialog(true);
+    };
+
+    const orderDialogHandleSetAndOpen = (orderParam: IOrder) => {
+        setOrder(orderParam)
+        setOrderDialog(true);
+    };
+
+    const orderDialogHandleClose = () => {
+        setOrderDialog(false);
+    };
+
+    const changeAdded = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setAdded(event.target.checked);
+    };
+
+    const changeReady = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setReady(event.target.checked);
+    };
+
+    const changeGiven = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setGiven(event.target.checked);
+    };
+
+    const changeCanceled = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setCanceled(event.target.checked);
+    };
+
+    const changeAll = (event: React.ChangeEvent<HTMLInputElement>) => {
+        changeAdded(event);
+        changeReady(event);
+        changeGiven(event);
+        changeCanceled(event);
+    };
+
+    const reset = () => {
+        setAdded(true);
+        setReady(true);
+        setGiven(true);
+        setCanceled(true);
+        setGetPageTrigger(!getPageTrigger);
+    };
+
     const orderItems = orderPage?.content.map((el) => {
         let status: OrderStatus = getStatus(el);
         return (
-            <Grid item xs={3}>
+            <Grid item xs={4}>
                 <Card sx={{
                     height: "100%"
                 }}>
@@ -110,6 +168,18 @@ const Order = () => {
                         <CardContent>
                             <Typography gutterBottom variant="h5" component="div">
                                 {el.clientInfo.name}
+                                <IconButton size="small"
+                                            onTouchStart={(event) => event.stopPropagation()}
+                                            onMouseDown={(event) => event.stopPropagation()}
+                                            onClick={(event) => {
+                                                event.stopPropagation();
+                                                event.preventDefault();
+                                                orderDialogHandleSetAndOpen(el);
+                                            }}
+                                            color="primary"
+                                >
+                                    <EditNoteIcon/>
+                                </IconButton>
                             </Typography>
                             <Typography variant="body2" color="text.secondary">
                                 Дата: {el.date}
@@ -154,10 +224,79 @@ const Order = () => {
             display: 'flex',
             padding: 0
         }}>
+            <Box sx={{
+                width: '30%',
+                mt: 2
+            }}>
+                <Box sx={{
+                    boxShadow: 2,
+                    borderRadius: 2,
+                    width: '100%',
+                    pl: 2
+                }}>
+                    <Typography variant='h6'>Расходы/Доходы</Typography>
+                    <FormControlLabel
+                        label="Все"
+                        control={
+                            <Checkbox
+                                checked={added && ready && given && canceled}
+                                indeterminate={!(added && ready && given && canceled)}
+                                onChange={changeAll}
+                            />
+                        }
+                    />
+                    <Box sx={{display: 'flex', flexDirection: 'column', ml: 3}}>
+                        <FormControlLabel
+                            label={ADDED.text}
+                            control={<Checkbox checked={added} onChange={changeAdded}/>}
+                        />
+                        <FormControlLabel
+                            label={READY.text}
+                            control={<Checkbox checked={ready} onChange={changeReady}/>}
+                        />
+                        <FormControlLabel
+                            label={GIVEN.text}
+                            control={<Checkbox checked={given} onChange={changeGiven}/>}
+                        />
+                        <FormControlLabel
+                            label={CANCELED.text}
+                            control={<Checkbox checked={canceled} onChange={changeCanceled}/>}
+                        />
+                    </Box>
 
+                </Box>
+                <Box sx={{
+                    boxShadow: 2,
+                    borderRadius: 2,
+                    width: '100%',
+                    pt: 2,
+                    pb: 2,
+                    pl: 2,
+                    mt: 2,
+                    display: 'flex',
+                    flexDirection: 'column'
+                }}>
+                    <Button variant="outlined" sx={{
+                        width: '80%',
+                        m: 'auto'
+                    }}
+
+                    >Сбросить</Button>
+                    <Button variant="contained"
+                            sx={{
+                                width: '80%',
+                                m: 'auto',
+                                mt: 2
+                            }}
+                            onClick={() => setGetPageTrigger(!getPageTrigger)}
+                    >
+                        Применить
+                    </Button>
+                </Box>
+            </Box>
             <Box sx={{
                 height: "100%",
-                width: "100%",
+                width: "70%",
                 display: 'flex',
                 flexDirection: 'column',
                 padding: 0
@@ -201,6 +340,7 @@ const Order = () => {
                 severity: 'error',
                 message: ''
             })}/>
+            <OrderDialog open={orderDialog} handleOpen={orderDialogHandleOpen} handleClose={orderDialogHandleClose} order={order}/>
         </Container>
     );
 };

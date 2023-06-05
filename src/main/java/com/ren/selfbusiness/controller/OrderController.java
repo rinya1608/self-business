@@ -1,6 +1,8 @@
 package com.ren.selfbusiness.controller;
 
+import com.ren.selfbusiness.dto.request.OrderFilterRequest;
 import com.ren.selfbusiness.dto.request.OrderRequest;
+import com.ren.selfbusiness.dto.request.TransactionFilterRequest;
 import com.ren.selfbusiness.dto.response.MessageBody;
 import com.ren.selfbusiness.dto.response.OrderBody;
 import com.ren.selfbusiness.dto.response.Response;
@@ -10,6 +12,7 @@ import com.ren.selfbusiness.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -40,11 +43,13 @@ public class OrderController {
         return ResponseEntity.ok(Response.<MessageBody>builder().body(new MessageBody("Заказ добавлен")).build());
     }
 
-    @GetMapping
+    @PostMapping("/all")
     public ResponseEntity<?> getPageWithOrders(@RequestHeader(name = "Authorization") String token,
                                                @RequestParam(defaultValue = "10") int size,
-                                               @RequestParam(defaultValue = "0") int page) {
-        Page<OrderBody> pageWithOrders = orderService.getPageWithOrders(PageRequest.of(page, size),
+                                               @RequestParam(defaultValue = "0") int page,
+                                               @RequestBody OrderFilterRequest filterReq) {
+        Sort sort = Sort.by(Sort.Direction.DESC, "date");
+        Page<OrderBody> pageWithOrders = orderService.getPageWithOrders(filterReq, PageRequest.of(page, size, sort),
                 userService.parseAndFindByJwt(token));
         return ResponseEntity.ok(Response.<Page<OrderBody>>builder().body(pageWithOrders).build());
     }
