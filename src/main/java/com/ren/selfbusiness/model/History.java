@@ -23,6 +23,10 @@ public class History {
     @Enumerated(EnumType.STRING)
     private ResourceHistoryStatus status;
 
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "resource_id")
+    private Resource resource;
+
     public History(Integer count, ResourceHistoryStatus status) {
         this.count = count;
         this.status = status;

@@ -7,6 +7,7 @@ import transactionReducer from "./reducers/TransactionSlice"
 import transactionStatisticReducer from "./reducers/TransactionStatisticSlice"
 import purchaseReducer from "./reducers/PurchaseSlice"
 import templateReducer from "./reducers/TemplateSlice"
+import orderReducer from "./reducers/OrderSlice"
 
 
 const rootReducer = combineReducers({
@@ -17,7 +18,8 @@ const rootReducer = combineReducers({
     transactionReducer,
     transactionStatisticReducer,
     purchaseReducer,
-    templateReducer
+    templateReducer,
+    orderReducer
 })
 
 export const setupStore = () => {

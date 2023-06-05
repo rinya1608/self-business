@@ -31,7 +31,7 @@ public class Resource {
     @JoinColumn(name = "creator_id")
     private User creator;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "resource")
     private List<History> history;
 
     public Resource(Integer count, BigDecimal price, BigDecimal unitPrice, ResourceType type, User creator) {
@@ -48,10 +48,12 @@ public class Resource {
     }
 
     public void addResourceHistory(History history) {
+        history.setResource(this);
         this.history.add(history);
     }
 
     public void removeResourceHistory(History history) {
+        history.setResource(null);
         this.history.remove(history);
     }
 }

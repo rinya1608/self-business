@@ -17,11 +17,12 @@ import {
 import MenuIcon from '@mui/icons-material/Menu';
 import {useAppDispatch, useAppSelector} from "../hooks/redux";
 import {getCurrentUser, logout} from "../api/auth";
-import {LOGIN, MAIN} from "../constants/Urls";
+import {LOGIN, MAIN, ORDER} from "../constants/Urls";
 import ResourceTypeDialog from "./ResourceTypeDialog";
 import TemplateDialog from "./TemplateDialog";
 import {CurrentUserState} from "../store/reducers/CurrentUserSlice";
 import LogoutIcon from '@mui/icons-material/Logout';
+import OrderDialog from './OrderDialog';
 
 
 interface DrawerListEl {
@@ -34,6 +35,7 @@ const Header = () => {
     const [menu, setMenu] = useState(false);
     const [resourceTypeDialog, setResourceTypeDialog] = useState(false);
     const [templateDialog, setTemplateDialog] = useState(false);
+    const [orderDialog, setOrderDialog] = useState(false);
     const [createMenu, setCreateMenu] = React.useState<null | HTMLElement>(null);
 
 
@@ -70,6 +72,15 @@ const Header = () => {
 
     const templateHandleClose = () => {
         setTemplateDialog(false);
+        setCreateMenu(null);
+    };
+
+    const orderHandleOpen = () => {
+        setOrderDialog(true);
+    };
+
+    const orderHandleClose = () => {
+        setOrderDialog(false);
         setCreateMenu(null);
     };
 
@@ -110,6 +121,7 @@ const Header = () => {
                         >
                             <MenuItem onClick={resourceTypeHandleOpen}>Расходный материал</MenuItem>
                             <MenuItem onClick={templateHandleOpen}>Продукт/Услуга</MenuItem>
+                            <MenuItem onClick={orderHandleOpen}>Заказ</MenuItem>
                         </Menu>
                     </Box>
                     <Box>
@@ -141,6 +153,7 @@ const Header = () => {
                         <List>
                             {[{text: "Склад", href: "/resource-types"},
                                 {text: "Продукция/Услуги", href: "/template"},
+                                {text: "Заказы", href: ORDER},
                                 {text: "История операций", href: "/history"},
                                 {text: "Статистика", href: "/statistic"},
                                 {text: "Контакты", href: "/contact"}].map((el: DrawerListEl, index) => (
@@ -157,6 +170,7 @@ const Header = () => {
             <ResourceTypeDialog open={resourceTypeDialog} handleOpen={resourceTypeHandleOpen}
                                 handleClose={resourceTypeHandleClose}/>
             <TemplateDialog open={templateDialog} handleOpen={templateHandleOpen} handleClose={templateHandleClose}/>
+            <OrderDialog open={orderDialog} handleOpen={orderHandleOpen} handleClose={orderHandleClose}/>
         </Box>
     );
 };

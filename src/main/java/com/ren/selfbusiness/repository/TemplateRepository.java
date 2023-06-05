@@ -7,6 +7,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
+
 public interface TemplateRepository extends JpaRepository<Template, Long> {
     Page<Template> findAllByUser(Pageable pageable, User user);
+    List<Template> findAllByIdIsIn(List<Long> ids);
 }

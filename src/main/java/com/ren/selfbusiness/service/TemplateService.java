@@ -10,6 +10,8 @@ import com.ren.selfbusiness.model.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
+
 public interface TemplateService {
     void addTemplate(TemplateRequest req, User user);
 
@@ -17,6 +19,8 @@ public interface TemplateService {
 
     void deleteTemplate(Long id);
     Page<TemplateBody> getAll(Pageable pageable, User user);
+
+    List<Template> getAllByIdIn(List<Long> ids);
 
     Template getTemplateById(Long id);
 }

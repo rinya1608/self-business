@@ -45,7 +45,6 @@ const Template = () => {
 
     useEffect(() => {
         if (page != 0) dispatch(getPageWithTemplates(page, 10));
-        console.log(message)
     }, [page, message])
     const handleChangePage = (event: React.ChangeEvent<unknown>, value: number) => {
         setPage(value);

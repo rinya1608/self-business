@@ -7,8 +7,9 @@ import Wrapper from "./components/Wrapper";
 import OperationHistory from "./components/OperationHistory";
 import Template from "./components/Template";
 import TransactionalDiagrams from "./components/TransactionalDiagrams";
-import {LOGIN, MAIN, TEMPLATE, TYPE} from "./constants/Urls";
+import {LOGIN, MAIN, ORDER, TEMPLATE, TYPE} from "./constants/Urls";
 import Contacts from "./components/Contacts";
+import Order from "./components/Order";
 
 const App = () => {
     return (
@@ -20,6 +21,7 @@ const App = () => {
             <Route path="/history" element={<Wrapper><OperationHistory/></Wrapper>}/>
             <Route path="/statistic" element={<Wrapper><TransactionalDiagrams/></Wrapper>}/>
             <Route path="/contact" element={<Wrapper><Contacts/></Wrapper>}/>
+            <Route path={ORDER} element={<Wrapper><Order/></Wrapper>}/>
             <Route path="*" element={<Navigate to={MAIN} replace={true} />}/>
         </Routes>
     );

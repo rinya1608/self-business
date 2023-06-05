@@ -89,6 +89,11 @@ public class TemplateServiceImpl implements TemplateService {
     }
 
     @Override
+    public List<Template> getAllByIdIn(List<Long> ids) {
+        return templateRepository.findAllByIdIsIn(ids);
+    }
+
+    @Override
     public Template getTemplateById(Long id) {
         return templateRepository.findById(id).orElseThrow(() -> exceptionResolver.resolve(T_01));
     }

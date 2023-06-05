@@ -2,10 +2,9 @@ package com.ren.selfbusiness.service.impl;
 
 import com.ren.selfbusiness.dto.request.ResourceRequest;
 import com.ren.selfbusiness.dto.response.ResourceBody;
+import com.ren.selfbusiness.enumarate.ResourceHistoryStatus;
 import com.ren.selfbusiness.mapper.EntityMapper;
-import com.ren.selfbusiness.model.Resource;
-import com.ren.selfbusiness.model.ResourceType;
-import com.ren.selfbusiness.model.User;
+import com.ren.selfbusiness.model.*;
 import com.ren.selfbusiness.repository.ResourceRepository;
 import com.ren.selfbusiness.resolver.exception.ExceptionResolver;
 import com.ren.selfbusiness.service.ResourceService;
@@ -18,8 +17,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.*;
 
 import static com.ren.selfbusiness.constant.ErrorCodeStorage.R_01;
+import static com.ren.selfbusiness.constant.ErrorCodeStorage.R_02;
 
 @Service
 @Transactional(readOnly = true)
@@ -50,6 +51,54 @@ public class ResourceServiceImpl implements ResourceService {
             resource.setTypeName(type.getName());
             resource.setUnit(type.getUnit());
         }
+    }
+
+    @Override
+    public List<History> changeResourceCountForTemplate(Template template, int count, ResourceHistoryStatus historyStatus) {
+        List<History> histories = new ArrayList<>();
+        List<Ingredient> ingredients = template.getIngredients();
+        ingredients.forEach(ingredient -> {
+            List<Resource> resources = ingredient.getResourceType().getResources();
+            List<Resource> sortResources = resources.stream()
+                    .filter(r -> r.getCount() > 0)
+                    .sorted(Comparator.comparing(Resource::getId))
+                    .toList();
+
+            Map<Long, Integer> deltaByResourceId = changeResourceCountByIngredient(sortResources, ingredient, count);
+            if (deltaByResourceId.isEmpty())
+                throw exceptionResolver.resolve(R_02, "Не хватает " + ingredient.getResourceType().getName());
+            else sortResources.forEach((r) -> {
+                Long resourceId = r.getId();
+                if (deltaByResourceId.containsKey(resourceId)) {
+                    History history = new History(deltaByResourceId.get(resourceId), historyStatus);
+                    histories.add(history);
+                    r.addResourceHistory(history);
+                }
+            });
+        });
+
+        return histories;
+    }
+
+    private Map<Long, Integer> changeResourceCountByIngredient(List<Resource> resources, Ingredient ingredient, int count) {
+        Map<Long, Integer> deltaByResourceId = new HashMap<>();
+        Integer ingredientCount = ingredient.getCount() * count;
+        for (Resource r :
+                resources) {
+            if (ingredientCount == 0) break;
+            Integer resourceCount = r.getCount();
+            Integer delta = resourceCount;
+            if (resourceCount >= ingredientCount) {
+                delta = ingredientCount;
+                r.setCount(resourceCount - delta);
+            }
+            else r.setCount(0);
+            deltaByResourceId.put(r.getId(), delta);
+            ingredientCount -= delta;
+        }
+        if (ingredientCount > 0) return Collections.emptyMap();
+
+        return deltaByResourceId;
     }
 
     @Transactional
