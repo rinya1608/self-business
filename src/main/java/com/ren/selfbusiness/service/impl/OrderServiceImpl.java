@@ -89,34 +89,36 @@ public class OrderServiceImpl implements OrderService {
         if (OrderStatus.READY.equals(status)) {
             prepareForChangeStatusToReady(order);
         } else {
-            ResourceBooking resourceBooking = resourceBookingRepository.findByOrder(order);
+            List<ResourceBooking> resourceBookingList = resourceBookingRepository.findByOrder(order);
             if (OrderStatus.GIVEN.equals(status)) {
-                prepareForChangeStatusToGiven(order, user, resourceBooking);
+                prepareForChangeStatusToGiven(order, user, resourceBookingList);
             } else if (OrderStatus.CANCELED.equals(status) && OrderStatus.READY.equals(order.getStatus())) {
-                prepareForChangeCanceled(resourceBooking);
+                prepareForChangeCanceled(resourceBookingList);
             }
+            resourceBookingRepository.saveAll(resourceBookingList);
+            resourceBookingRepository.deleteAll(resourceBookingList);
         }
         order.setStatus(status);
         orderRepository.save(order);
     }
 
-    private void prepareForChangeCanceled(ResourceBooking resourceBooking) {
-        resourceBooking.getHistories().forEach((h) -> {
-            Resource resource = h.getResource();
-            resource.setCount(resource.getCount() + h.getCount());
-            resource.removeResourceHistory(h);
+    private void prepareForChangeCanceled(List<ResourceBooking> resourceBookingList) {
+        resourceBookingList.forEach(resourceBooking -> {
+            resourceBooking.getHistories().forEach((h) -> {
+                Resource resource = h.getResource();
+                resource.setCount(resource.getCount() + h.getCount());
+                resource.removeResourceHistory(h);
+            });
         });
-        resourceBookingRepository.save(resourceBooking);
-        resourceBookingRepository.delete(resourceBooking);
 
     }
 
-    private void prepareForChangeStatusToGiven(Order order, User user, ResourceBooking resourceBooking) {
-        resourceBooking.getHistories().forEach((h) -> {
-            h.setStatus(ResourceHistoryStatus.USED);
+    private void prepareForChangeStatusToGiven(Order order, User user, List<ResourceBooking> resourceBookingList) {
+        resourceBookingList.forEach(resourceBooking -> {
+            resourceBooking.getHistories().forEach((h) -> {
+                h.setStatus(ResourceHistoryStatus.USED);
+            });
         });
-        resourceBookingRepository.save(resourceBooking);
-        resourceBookingRepository.delete(resourceBooking);
 
         order.getTemplates().forEach((t) -> {
             for (int i = 0; i < t.getCount(); i++) {
