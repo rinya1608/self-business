@@ -17,7 +17,7 @@ import {
     TableContainer,
     TableHead,
     TableRow,
-    Typography
+    Typography, useMediaQuery
 } from "@mui/material";
 import {useAppDispatch, useAppSelector} from "../hooks/redux";
 import {FieldType} from "../types/FieldType";
@@ -63,6 +63,9 @@ const OrderViewDialog = ({open, handleOpen, handleClose, order}: Props) => {
     const [tableOpen, setTableOpen] = React.useState<boolean[]>(new Array(order.templates.length).fill(false));
     const [orderState, setOrderState] = useState(order)
     const [sbParams, setSbParams] = useState<SnackBarParams>({open: false, severity: 'error', message: 'me'});
+
+
+    const isMobile = useMediaQuery('(max-width:800px)');
 
 
     useEffect(() => {
@@ -220,7 +223,7 @@ const OrderViewDialog = ({open, handleOpen, handleClose, order}: Props) => {
                 <Typography></Typography>
                 <DialogTitle id="-title">Продукты/Услуги</DialogTitle>
                 <TableContainer component={Paper}>
-                    <Table aria-label="simple table">
+                    <Table aria-label="simple table" sx={{ minWidth: isMobile ? 650 : 0 }}>
                         <TableHead>
                             <TableRow>
                                 <TableCell/>

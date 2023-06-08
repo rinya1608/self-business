@@ -9,7 +9,7 @@ import {
     Container, FormControlLabel,
     Grid, IconButton,
     Pagination,
-    Typography
+    Typography, useMediaQuery
 } from "@mui/material";
 
 import {useAppDispatch, useAppSelector} from "../hooks/redux";
@@ -57,6 +57,8 @@ const Order = () => {
     const dispatch = useAppDispatch()
     const {orderPage, isLoading, error}: OrderSlice = useAppSelector(state => state.orderReducer)
     const {message}: MessageState = useAppSelector(state => state.messageReducer)
+
+    const isMobile = useMediaQuery('(max-width:800px)');
 
     useEffect(() => {
         changePageCount();
@@ -160,7 +162,9 @@ const Order = () => {
     const orderItems = orderPage?.content.map((el) => {
         let status: OrderStatus = getStatus(el);
         return (
-            <Grid item xs={4}>
+            <Grid item xs={isMobile ? 12 : 4} sx={{
+                p: isMobile ? 0 : 2
+            }}>
                 <Card sx={{
                     height: "100%"
                 }}>
@@ -222,20 +226,27 @@ const Order = () => {
             height: '100%',
             width: '100%',
             display: 'flex',
+            flexDirection: isMobile ? 'column' : 'row',
+            alignItems: isMobile ? 'center' : 'normal',
             padding: 0
         }}>
             <Box sx={{
-                width: '30%',
+                width: isMobile ? '90%' : '30%',
                 mt: 2
             }}>
                 <Box sx={{
                     boxShadow: 2,
                     borderRadius: 2,
                     width: '100%',
-                    pl: 2
+                    pl: isMobile ? 0 : 2
                 }}>
-                    <Typography variant='h6'>Расходы/Доходы</Typography>
+                    <Typography variant='h6' sx={{
+                        ml: isMobile ? 2 : 0
+                    }}>Расходы/Доходы</Typography>
                     <FormControlLabel
+                        sx={{
+                            ml: isMobile ? 2 : 0
+                        }}
                         label="Все"
                         control={
                             <Checkbox
@@ -245,7 +256,7 @@ const Order = () => {
                             />
                         }
                     />
-                    <Box sx={{display: 'flex', flexDirection: 'column', ml: 3}}>
+                    <Box sx={{display: 'flex', flexDirection: 'column', ml: isMobile ? 5 : 3}}>
                         <FormControlLabel
                             label={ADDED.text}
                             control={<Checkbox checked={added} onChange={changeAdded}/>}
@@ -271,7 +282,7 @@ const Order = () => {
                     width: '100%',
                     pt: 2,
                     pb: 2,
-                    pl: 2,
+                    pl: isMobile ? 0 : 2,
                     mt: 2,
                     display: 'flex',
                     flexDirection: 'column'
@@ -296,7 +307,7 @@ const Order = () => {
             </Box>
             <Box sx={{
                 height: "100%",
-                width: "70%",
+                width: isMobile ? '90%' : '70%',
                 display: 'flex',
                 flexDirection: 'column',
                 padding: 0
@@ -304,18 +315,18 @@ const Order = () => {
                 <Box sx={{
                     boxShadow: 2,
                     borderRadius: 2,
-                    width: "50%",
-                    m: 'auto',
+                    width: isMobile ? '100%' : '50%',
+                    m: isMobile ? 0 : 'auto',
                     mt: 2,
-                    pl: 2
+                    pl: isMobile ? 0 : 2
                 }}>
                 </Box>
                 <Box sx={{
                     flexGrow: 3,
                 }}>
-                    <Grid container spacing={2} sx={{
+                    <Grid container spacing={isMobile ? {xs: 2} : 2} sx={{
                         width: '100%',
-                        ml: 5
+                        ml: isMobile ? 0 : 5
                     }}>
                         {
                             orderItems

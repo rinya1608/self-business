@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import {Box, Button, Container, Typography} from "@mui/material";
+import {Box, Button, Container, Typography, useMediaQuery} from "@mui/material";
 
 import {useAppDispatch, useAppSelector} from "../hooks/redux";
 import {MessageState} from "../store/reducers/MesageSlice";
@@ -37,6 +37,8 @@ const TransactionalDiagrams = () => {
     const [dateInfo, setDateInfo] = React.useState<DateInfoArrays | null>(null);
 
     const [getPageTrigger, setGetPageTrigger] = React.useState(true);
+
+    const isMobile = useMediaQuery('(max-width:800px)');
 
 
     const dispatch = useAppDispatch()
@@ -190,33 +192,41 @@ const TransactionalDiagrams = () => {
             height: '100%',
             width: '100%',
             display: 'flex',
+            flexDirection: isMobile ? 'column' : 'row',
+            alignItems: isMobile ? 'center' : 'normal',
             padding: 0
         }}>
             <Box sx={{
-                width: '30%',
+                width: isMobile ? '90%' : '30%',
                 mt: 2
             }}>
+                {
+                    isMobile ? null :
+                        <Box sx={{
+                            boxShadow: 2,
+                            borderRadius: 2,
+                            width: '100%',
+                            pl: 2,
+                            height: '158px'
+                        }}>
+                        </Box>
+                }
                 <Box sx={{
                     boxShadow: 2,
                     borderRadius: 2,
                     width: '100%',
-                    pl: 2,
-                    height: '158px'
-                }}>
-                </Box>
-                <Box sx={{
-                    boxShadow: 2,
-                    borderRadius: 2,
-                    width: '100%',
-                    pl: 2,
+                    pl: isMobile ? 0 : 2,
                     pb: 2,
                     mt: 2,
                 }}>
-                    <Typography variant='h6'>Дата</Typography>
+                    <Typography variant='h6' sx={{
+                        ml: isMobile ? 1 : 0
+                    }}>Дата</Typography>
                     <Box sx={{
                         display: 'flex',
                         mt: 2,
-                        alignItems: 'center'
+                        alignItems: 'center',
+                        ml: isMobile ? 1 : 0
                     }}>
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
                             <DatePicker value={dateFrom}
@@ -248,7 +258,7 @@ const TransactionalDiagrams = () => {
                     width: '100%',
                     pt: 2,
                     pb: 2,
-                    pl: 2,
+                    pl: isMobile ? 0 : 2,
                     mt: 2,
                     display: 'flex',
                     flexDirection: 'column'
@@ -275,7 +285,7 @@ const TransactionalDiagrams = () => {
                 transactionStatistic ?
                     <Box sx={{
                         height: "100%",
-                        width: "70%",
+                        width: isMobile ? '90%' : '70%',
                         display: 'flex',
                         flexDirection: 'column',
                         padding: 0,
@@ -284,17 +294,18 @@ const TransactionalDiagrams = () => {
                     }}>
                         <Box sx={{
                             display: 'flex',
-                            justifyContent: 'space-between',
+                            flexDirection: isMobile ? 'column' : 'row',
+                            justifyContent: isMobile ? 'normal' : 'space-between',
                             width: '100%',
                             height: '158px'
                         }}>
                             <Box sx={{
                                 boxShadow: 2,
-                                width: 'calc(100% / 3 - 13px)',
+                                width: isMobile ? '90%' : 'calc(100% / 3 - 13px)',
                                 borderRadius: 2,
                                 height: '100%',
                                 pl: 2,
-                                pb: 3.2
+                                pb: isMobile ? 0 : 3.2
                             }}>
                                 <Typography variant='h6'>Итог</Typography>
                                 <Box sx={{
@@ -311,12 +322,13 @@ const TransactionalDiagrams = () => {
                             <Box sx={{
                                 boxShadow: 2,
                                 borderRadius: 2,
-                                width: 'calc(100% / 3 - 13px)',
+                                width: isMobile ? '90%' : 'calc(100% / 3 - 13px)',
                                 height: '100%',
                                 pl: 2,
-                                pr: 2,
-                                pb: 3.2,
-                                ml: 2
+                                pr: isMobile ? 0 : 2,
+                                pb: isMobile ? 0 : 3.2,
+                                ml: isMobile ? 0 : 2,
+                                mt: isMobile ? 2 : 0
                             }}>
                                 <Typography variant='h6'>Доход</Typography>
                                 <Box sx={{
@@ -333,12 +345,13 @@ const TransactionalDiagrams = () => {
                             <Box sx={{
                                 boxShadow: 2,
                                 borderRadius: 2,
-                                width: 'calc(100% / 3 - 13px)',
+                                width: isMobile ? '90%' : 'calc(100% / 3 - 13px)',
                                 height: '100%',
                                 pl: 2,
-                                pr: 2,
-                                pb: 3.2,
-                                ml: 2
+                                pr: isMobile ? 0 : 2,
+                                pb: isMobile ? 0 : 3.2,
+                                ml: isMobile ? 0 : 2,
+                                mt: isMobile ? 2 : 0
                             }}>
                                 <Typography variant='h6'>Расход</Typography>
                                 <Box sx={{
@@ -356,14 +369,14 @@ const TransactionalDiagrams = () => {
                         <Box sx={{
                             boxShadow: 2,
                             borderRadius: 2,
-                            width: "100%",
+                            width: isMobile ? '94%' : '100%',
                             height: '100%',
                             pt: 2,
                             pb: 2,
-                            mt: 5
+                            mt: isMobile ? 30 : 5
                         }}>
                             <Box sx={{
-                                width: '94%',
+                                width: isMobile ? '100%' : '94%',
                                 margin: 'auto'
                             }}>
                                 <CanvasJSChart options={IncomeExpensesDiagramOptions}/>
@@ -373,14 +386,14 @@ const TransactionalDiagrams = () => {
                             transactionStatistic ? <Box sx={{
                                 boxShadow: 2,
                                 borderRadius: 2,
-                                width: "100%",
+                                width: isMobile ? '94%' : '100%',
                                 height: '100%',
                                 pt: 2,
                                 pb: 2,
                                 mt: 5
                             }}>
                                 <Box sx={{
-                                    width: '94%',
+                                    width: isMobile ? '100%' : '94%',
                                     margin: 'auto'
                                 }}>
                                     <CanvasJSChart options={options} />
@@ -391,14 +404,14 @@ const TransactionalDiagrams = () => {
                         <Box sx={{
                             boxShadow: 2,
                             borderRadius: 2,
-                            width: "100%",
+                            width: isMobile ? '94%' : '100%',
                             height: '100%',
                             pt: 2,
                             pb: 2,
                             mt: 5
                         }}>
                             <Box sx={{
-                                width: '94%',
+                                width: isMobile ? '100%' : '94%',
                                 margin: 'auto'
                             }}>
                                 <CanvasJSChart options={templateBarDiagramOptions}/>
@@ -408,14 +421,14 @@ const TransactionalDiagrams = () => {
                         <Box sx={{
                             boxShadow: 2,
                             borderRadius: 2,
-                            width: "100%",
+                            width: isMobile ? '94%' : '100%',
                             height: '100%',
                             pt: 2,
                             pb: 2,
                             mt: 5
                         }}>
                             <Box sx={{
-                                width: '94%',
+                                width: isMobile ? '100%' : '94%',
                                 margin: 'auto'
                             }}>
                                 <CanvasJSChart options={typeBarDiagramOptions}/>

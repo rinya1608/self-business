@@ -11,7 +11,7 @@ import {
     ListItemAvatar,
     ListItemText,
     Pagination,
-    Typography
+    Typography, useMediaQuery
 } from "@mui/material";
 
 import {useAppDispatch, useAppSelector} from "../hooks/redux";
@@ -34,6 +34,8 @@ const OperationHistory = () => {
         font-size: 14px;
       }
     `
+
+    const isMobile = useMediaQuery('(max-width:800px)');
 
     const [page, setPage] = React.useState(1);
     const [pageCount, setPageCount] = React.useState(1);
@@ -151,20 +153,26 @@ const OperationHistory = () => {
             height: '100%',
             width: '100%',
             display: 'flex',
-            padding: 0
+            flexDirection: isMobile ? 'column' : 'row',
+            alignItems: isMobile ? 'center' : 'normal'
         }}>
             <Box sx={{
-                width: '30%',
+                width: isMobile ? '90%' : '30%',
                 mt: 2
             }}>
                 <Box sx={{
                     boxShadow: 2,
                     borderRadius: 2,
                     width: '100%',
-                    pl: 2
+                    pl: isMobile ? 0 : 2
                 }}>
-                    <Typography variant='h6'>Расходы/Доходы</Typography>
+                    <Typography variant='h6' sx={{
+                        ml: isMobile ? 1 : 0
+                    }}>Расходы/Доходы</Typography>
                     <FormControlLabel
+                        sx={{
+                            ml: isMobile ? 1 : 0
+                        }}
                         label="Все"
                         control={
                             <Checkbox
@@ -174,7 +182,7 @@ const OperationHistory = () => {
                             />
                         }
                     />
-                    <Box sx={{display: 'flex', flexDirection: 'column', ml: 3}}>
+                    <Box sx={{display: 'flex', flexDirection: 'column', ml: isMobile ? 5 : 3}}>
                         <FormControlLabel
                             label="Расходы"
                             control={<Checkbox checked={getIncome} onChange={changeGetIncome}/>}
@@ -190,14 +198,17 @@ const OperationHistory = () => {
                     boxShadow: 2,
                     borderRadius: 2,
                     width: '100%',
-                    pl: 2,
+                    pl: isMobile ? 0 : 2,
                     pb: 2,
                     mt: 2,
                 }}>
-                    <Typography variant='h6'>Дата</Typography>
+                    <Typography variant='h6' sx={{
+                        ml: isMobile ? 1 : 0
+                    }}>Дата</Typography>
                     <Box sx={{
                         display: 'flex',
                         mt: 2,
+                        ml: isMobile ? 1 : 0,
                         alignItems: 'center'
                     }}>
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -230,7 +241,7 @@ const OperationHistory = () => {
                     width: '100%',
                     pt: 2,
                     pb: 2,
-                    pl: 2,
+                    pl: isMobile ? 0 : 2,
                     mt: 2,
                     display: 'flex',
                     flexDirection: 'column'
@@ -255,7 +266,7 @@ const OperationHistory = () => {
             </Box>
             <Box sx={{
                 height: "100%",
-                width: "70%",
+                width: isMobile ? '90%' : '70%',
                 display: 'flex',
                 flexDirection: 'column',
                 padding: 0
@@ -263,18 +274,20 @@ const OperationHistory = () => {
                 <Box sx={{
                     boxShadow: 2,
                     borderRadius: 2,
-                    width: "50%",
+                    width: isMobile ? '100%' : '50%',
                     m: 'auto',
                     mt: 2,
-                    pl: 2
+                    pl: isMobile ? 0 : 2
                 }}>
-                    <Typography variant='h6'>Операции</Typography>
+                    <Typography variant='h6' sx={{
+                        ml: isMobile ? 1 : 0
+                    }}>Операции</Typography>
                 </Box>
                 <Box sx={{
                     flexGrow: 3,
                 }}>
                     <List sx={{
-                        width: '50%',
+                        width: isMobile ? '100%' : '50%',
                         m: 'auto'
                     }}>
                         {

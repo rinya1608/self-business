@@ -9,7 +9,7 @@ import {
     ListItemAvatar,
     ListItemButton,
     ListItemText,
-    Pagination, Typography
+    Pagination, Typography, useMediaQuery
 } from "@mui/material";
 import {useAppDispatch, useAppSelector} from "../hooks/redux";
 import {ResourceTypeState} from "../store/reducers/ResourceTypeSlice";
@@ -29,6 +29,8 @@ const ResourceType = () => {
     const [resourceTypeDialog, setResourceTypeDialog] = useState(false);
     const [resourceDialog, setResourceDialog] = useState(false);
     const [resourceType, setResourceType] = useState<IResourceType | null>(null);
+
+    const isMobile = useMediaQuery('(max-width:800px)');
 
     const dispatch = useAppDispatch()
     const {resourceTypePage, isLoading, error}: ResourceTypeState = useAppSelector(state => state.resourceTypeReducer)
@@ -124,7 +126,7 @@ const ResourceType = () => {
                 flexGrow: 3,
             }}>
                 <List sx={{
-                    width: '50%',
+                    width: isMobile ? '100%' : "50%",
                     m: 'auto'
                 }}>
                     {

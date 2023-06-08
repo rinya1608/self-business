@@ -10,7 +10,7 @@ import {
     ListItemAvatar,
     ListItemButton,
     ListItemText,
-    Pagination,
+    Pagination, useMediaQuery,
 } from "@mui/material";
 import CakeIcon from '@mui/icons-material/Cake';
 import {useAppDispatch, useAppSelector} from "../hooks/redux";
@@ -33,6 +33,8 @@ const Template = () => {
     const [resourceDialog, setResourceDialog] = useState(false);
     const [template, setTemplate] = useState<ITemplate | null>(null);
     const [sbParams, setSbParams] = useState<SnackBarParams>({open: false, severity: 'error', message: 'me'});
+
+    const isMobile = useMediaQuery('(max-width:800px)');
 
 
     const dispatch = useAppDispatch()
@@ -141,7 +143,7 @@ const Template = () => {
                 flexGrow: 3,
             }}>
                 <List sx={{
-                    width: '50%',
+                    width: isMobile ? '100%' : '50%',
                     m: 'auto'
                 }}>
                     {

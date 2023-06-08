@@ -12,7 +12,7 @@ import {
     Menu,
     MenuItem,
     Toolbar,
-    Typography
+    Typography, useMediaQuery
 } from "@mui/material";
 import MenuIcon from '@mui/icons-material/Menu';
 import {useAppDispatch, useAppSelector} from "../hooks/redux";
@@ -23,6 +23,7 @@ import TemplateDialog from "./TemplateDialog";
 import {CurrentUserState} from "../store/reducers/CurrentUserSlice";
 import LogoutIcon from '@mui/icons-material/Logout';
 import OrderDialog from './OrderDialog';
+import AddBoxIcon from '@mui/icons-material/AddBox';
 
 
 interface DrawerListEl {
@@ -31,6 +32,7 @@ interface DrawerListEl {
 }
 
 const Header = () => {
+    const isMobile = useMediaQuery('(max-width:800px)');
 
     const [menu, setMenu] = useState(false);
     const [resourceTypeDialog, setResourceTypeDialog] = useState(false);
@@ -46,6 +48,7 @@ const Header = () => {
         dispatch(getCurrentUser()).then((r) => {
             if (!r || !r.body) window.location.href = LOGIN;
         })
+        console.log(isMobile)
     }, [])
 
     const logoutEvent = () => {
@@ -84,6 +87,8 @@ const Header = () => {
         setCreateMenu(null);
     };
 
+    console.log(isMobile)
+
     return (
         <Box sx={{flexGrow: 1}}>
             <AppBar position="static">
@@ -105,13 +110,22 @@ const Header = () => {
                             <MenuIcon/>
                         </IconButton>
                         <Typography variant="h6" component="div">
-                            Self Business
+                            {isMobile ? "SB" : "Self Business"}
                         </Typography>
-                        <Button size="medium" variant="contained" onClick={createMenuHandleClick} sx={{
-                            ml: 5,
-                        }}>
-                            Добавить
-                        </Button>
+                        {
+                            isMobile ?
+                                <IconButton color="inherit" size="medium" onClick={createMenuHandleClick} sx={{
+                                    ml: 2,
+                                }}>
+                                    <AddBoxIcon/>
+                                </IconButton>
+                                :
+                                <Button size="medium" variant="contained" onClick={createMenuHandleClick} sx={{
+                                    ml: 5,
+                                }}>
+                                    Добавить
+                                </Button>
+                        }
                         <Menu
                             id="simple-menu"
                             anchorEl={createMenu}
