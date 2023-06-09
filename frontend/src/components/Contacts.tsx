@@ -19,10 +19,11 @@ const Template = () => {
         }}>
             <Typography sx={{
                 mt: 5
-            }} variant="h6">По всем вопросам обращаться в telegram канал <a href={"https://t.me/renselfbusiness"}>ссылка</a></Typography>
+            }} variant="h6">По всем вопросам обращаться в telegram канал <a href={"https://t.me/renrselfbusiness"}>ссылка</a>, а так же вы можете пройти <a href="https://forms.gle/qSZuehcGhNW8ASjW7">опрос</a>, что бы помочь нам</Typography>
             <Box
                 component="img"
                 sx={{
+
                     height: 350,
                     width: 350,
                 }}
